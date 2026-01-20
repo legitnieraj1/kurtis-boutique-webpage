@@ -11,6 +11,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { LiquidButton } from "@/components/ui/liquid-glass-button";
 
 import { CategoryBubbles } from "@/components/home/CategoryBubbles";
+import { HeroBannerCarousel } from "@/components/ui/HeroBannerCarousel";
 import { useEffect, useState } from "react";
 
 export default function Home() {
@@ -34,34 +35,19 @@ export default function Home() {
         <CategoryBubbles />
 
         {/* HERO SECTION */}
-        <section className="relative w-full h-[80vh] flex items-center justify-center overflow-hidden">
-          <div className="flex flex-col items-center gap-8 animate-in fade-in zoom-in duration-1000 p-4 z-10">
-            {/* Logo */}
+        <section className="relative w-full h-[80vh] flex flex-col items-center pt-8 overflow-hidden">
+          {/* Logo */}
+          <div className="z-10 mb-6 px-4">
             <img
               src="/kurtis-logo-large.png"
               alt="Kurtis Boutique"
-              className="w-64 sm:w-80 md:w-96 h-auto object-contain drop-shadow-2xl"
+              className="w-48 sm:w-64 md:w-80 h-auto object-contain drop-shadow-2xl"
             />
+          </div>
 
-            <p className="text-xl md:text-2xl text-stone-800 font-light tracking-wide text-center max-w-lg drop-shadow-sm">
-              Elegance in Every Stitch
-            </p>
-
-            <div className="flex flex-wrap justify-center gap-4 text-sm md:text-base font-medium text-stone-700 bg-white/40 backdrop-blur-md px-6 py-3 rounded-full shadow-sm border border-white/50">
-              <span className="flex items-center gap-1">Maternity and Normal wears</span>
-              <span className="w-[1px] h-4 bg-stone-400 self-center"></span>
-              <span className="flex items-center gap-1">We Customise</span>
-              <span className="w-[1px] h-4 bg-stone-400 self-center"></span>
-              <span className="flex items-center gap-1">For Family Mom son & daughter Combos</span>
-            </div>
-
-            <div className="flex gap-4 pointer-events-auto">
-              <Link href="/shop">
-                <LiquidButton className="px-8 text-lg h-14 rounded-full shadow-xl">
-                  Explore Collection
-                </LiquidButton>
-              </Link>
-            </div>
+          {/* Full Width Image-Only Carousel Banner */}
+          <div className="w-full flex-1 min-h-0 relative">
+            <HeroBannerCarousel />
           </div>
         </section>
 
