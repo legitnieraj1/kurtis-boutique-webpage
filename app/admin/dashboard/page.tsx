@@ -3,17 +3,34 @@
 import { useStore, useProductStore } from "@/lib/store";
 
 export default function AdminDashboard() {
-    const { orders } = useStore((state) => ({
-        orders: state.orders,
-        // products are in product store, need to import separate hook if in clearCart separate store,
-        // but looking at store.ts, products are in useProductStore
+    const { orders = [] } = useStore((state) => ({
+        orders: state.orders || [],
     }));
-    const { products: storeProducts } = useProductStore();
+    const { products: storeProducts = [] } = useProductStore((state) => ({
+        products: state.products || []
+    }));
 
-    // Calculate dynamic stats
-    const totalSales = orders.reduce((sum, order) => sum + order.total, 0);
-    const activeOrders = orders.filter(o => o.status === 'pending' || o.status === 'processing').length;
-    const productsInStock = storeProducts.filter(p => p.inStock).length;
+    // Safe date formatter
+    const formatDate = (dateString: string) => {
+        try {
+            const date = new Date(dateString);
+            // Check if date is valid
+            if (isNaN(date.getTime())) {
+                return "Invalid Date";
+            }
+            return date.toLocaleDateString();
+        } catch (e) {
+            return "Date Error";
+        }
+    };
+
+    // Calculate dynamic stats safely
+    const safeOrders = Array.isArray(orders) ? orders : [];
+    const safeProducts = Array.isArray(storeProducts) ? storeProducts : [];
+
+    const totalSales = safeOrders.reduce((sum, order) => sum + (Number(order.total) || 0), 0);
+    const activeOrders = safeOrders.filter(o => o.status === 'pending' || o.status === 'processing').length;
+    const productsInStock = safeProducts.filter(p => p.inStock).length;
 
     return (
         <div className="p-8 space-y-8">
@@ -21,9 +38,9 @@ export default function AdminDashboard() {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {[
-                    { label: "Total Sales", value: `₹${totalSales.toLocaleString()}`, change: orders.length > 0 ? "Real Data" : "No Sales" },
+                    { label: "Total Sales", value: `₹${totalSales.toLocaleString()}`, change: safeOrders.length > 0 ? "Real Data" : "No Sales" },
                     { label: "Active Orders", value: activeOrders.toString(), change: "" },
-                    { label: "Products in Stock", value: productsInStock.toString(), change: storeProducts.length > 0 ? "Live" : "Loading..." },
+                    { label: "Products in Stock", value: productsInStock.toString(), change: safeProducts.length > 0 ? "Live" : "Loading..." },
                 ].map((stat, idx) => (
                     <div key={idx} className="bg-background p-6 rounded-lg border border-border shadow-sm">
                         <p className="text-sm text-muted-foreground font-medium uppercase tracking-wide">{stat.label}</p>
@@ -37,7 +54,7 @@ export default function AdminDashboard() {
 
             <div className="bg-background rounded-lg border border-border p-6 min-h-[400px]">
                 <h3 className="text-lg font-medium mb-4">Recent Orders</h3>
-                {orders.length === 0 ? (
+                {safeOrders.length === 0 ? (
                     <div className="h-64 flex items-center justify-center text-muted-foreground">
                         No orders yet. Go to the store and place an order!
                     </div>
@@ -53,19 +70,19 @@ export default function AdminDashboard() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {orders.slice(0, 10).map((order) => (
-                                    <tr key={order.id} className="bg-background border-b hover:bg-muted/10">
-                                        <td className="px-6 py-4 font-medium">{order.id}</td>
-                                        <td className="px-6 py-4">{new Date(order.date).toLocaleDateString()}</td>
+                                {safeOrders.slice(0, 10).map((order) => (
+                                    <tr key={order.id || Math.random()} className="bg-background border-b hover:bg-muted/10">
+                                        <td className="px-6 py-4 font-medium">{order.id || 'N/A'}</td>
+                                        <td className="px-6 py-4">{formatDate(order.date)}</td>
                                         <td className="px-6 py-4">
                                             <span className={`px-2 py-1 rounded-full text-xs ${order.status === 'completed' ? 'bg-green-100 text-green-800' :
                                                 order.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
                                                     'bg-gray-100 text-gray-800'
                                                 }`}>
-                                                {order.status}
+                                                {order.status || 'Unknown'}
                                             </span>
                                         </td>
-                                        <td className="px-6 py-4">₹{order.total.toLocaleString()}</td>
+                                        <td className="px-6 py-4">₹{(Number(order.total) || 0).toLocaleString()}</td>
                                     </tr>
                                 ))}
                             </tbody>
