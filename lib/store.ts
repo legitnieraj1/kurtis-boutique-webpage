@@ -12,11 +12,21 @@ import { PRODUCTS, Product } from '@/data/products';
 export interface User {
     name: string;
     email: string;
+    role: 'admin' | 'customer';
+}
+
+export interface Order {
+    id: string;
+    date: string;
+    total: number;
+    status: 'pending' | 'processing' | 'completed' | 'cancelled';
+    items: CartItem[];
 }
 
 interface StoreState {
     wishlist: string[];
     cart: CartItem[];
+    orders: Order[];
     user: User | null;
     addToWishlist: (productId: string) => void;
     removeFromWishlist: (productId: string) => void;
@@ -24,6 +34,8 @@ interface StoreState {
     addToCart: (item: CartItem) => void;
     removeFromCart: (productId: string) => void;
     updateCartItemQuantity: (productId: string, quantity: number) => void;
+    clearCart: () => void;
+    addOrder: (order: Order) => void;
     login: (user: User) => void;
     logout: () => void;
 }
@@ -41,6 +53,7 @@ export const useStore = create<StoreState>()(
         (set, get) => ({
             wishlist: [],
             cart: [],
+            orders: [],
             user: null,
             addToWishlist: (productId) => set((state) => {
                 if (state.wishlist.includes(productId)) return state;
@@ -70,6 +83,10 @@ export const useStore = create<StoreState>()(
                 cart: state.cart.map(item =>
                     item.productId === productId ? { ...item, quantity } : item
                 )
+            })),
+            clearCart: () => set({ cart: [] }),
+            addOrder: (order) => set((state) => ({
+                orders: [order, ...state.orders]
             })),
             login: (user) => set({ user }),
             logout: () => set({ user: null }),

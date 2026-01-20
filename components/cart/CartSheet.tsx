@@ -151,7 +151,19 @@ export function CartSheet({ isOpen, onClose }: CartSheetProps) {
                                     <p className="text-xs text-muted-foreground text-center">
                                         Shipping and taxes calculated at checkout.
                                     </p>
-                                    <Button size="lg" className="w-full">
+                                    <Button size="lg" className="w-full" onClick={() => {
+                                        const newOrder = {
+                                            id: `ORD-${Date.now().toString().slice(-6)}`,
+                                            date: new Date().toISOString(),
+                                            total: subtotal,
+                                            status: 'pending' as const,
+                                            items: cartItems,
+                                        };
+                                        useStore.getState().addOrder(newOrder);
+                                        useStore.getState().clearCart();
+                                        onClose();
+                                        alert("Order placed successfully! (Simulated)");
+                                    }}>
                                         Checkout
                                     </Button>
                                 </div>

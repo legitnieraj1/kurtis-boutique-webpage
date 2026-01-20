@@ -4,17 +4,26 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Link as HomeLink } from "lucide-react";
+import { useStore } from "@/lib/store";
 import Link from "next/link";
 
 export default function AdminLogin() {
     const [loading, setLoading] = useState(false);
+    const { login } = useStore();
     const router = useRouter();
 
     const handleLogin = (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
-        // Simulate login
+
+        // Simulate login validation
+        // In a real app, this would verify credentials against a backend
         setTimeout(() => {
+            login({
+                name: "Admin User",
+                email: "admin@kurtis.com",
+                role: "admin",
+            });
             router.push("/admin/dashboard");
         }, 1000);
     };
