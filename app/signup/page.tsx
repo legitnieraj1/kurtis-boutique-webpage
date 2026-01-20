@@ -27,6 +27,7 @@ export default function SignupPage() {
         login({
             name: name,
             email: email,
+            role: 'customer',
         });
 
         setIsLoading(false);

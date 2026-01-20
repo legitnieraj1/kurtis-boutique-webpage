@@ -27,6 +27,7 @@ export default function LoginPage() {
         login({
             name: "Guest User", // Default mock name
             email: email,
+            role: 'customer',
         });
 
         setIsLoading(false);
