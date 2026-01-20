@@ -3,12 +3,9 @@
 import { useStore, useProductStore } from "@/lib/store";
 
 export default function AdminDashboard() {
-    const { orders = [] } = useStore((state) => ({
-        orders: state.orders || [],
-    }));
-    const { products: storeProducts = [] } = useProductStore((state) => ({
-        products: state.products || []
-    }));
+    // Atomic selectors to prevent re-renders on every store update
+    const orders = useStore(state => state.orders || []);
+    const storeProducts = useProductStore(state => state.products || []);
 
     // Safe date formatter
     const formatDate = (dateString: string) => {
@@ -70,8 +67,8 @@ export default function AdminDashboard() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {safeOrders.slice(0, 10).map((order) => (
-                                    <tr key={order.id || Math.random()} className="bg-background border-b hover:bg-muted/10">
+                                {safeOrders.slice(0, 10).map((order, idx) => (
+                                    <tr key={order.id || `order-${idx}`} className="bg-background border-b hover:bg-muted/10">
                                         <td className="px-6 py-4 font-medium">{order.id || 'N/A'}</td>
                                         <td className="px-6 py-4">{formatDate(order.date)}</td>
                                         <td className="px-6 py-4">
