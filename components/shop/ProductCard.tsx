@@ -10,9 +10,10 @@ import { cn } from "@/lib/utils";
 
 interface ProductCardProps {
     product: Product;
+    hideWishlist?: boolean;
 }
 
-export function ProductCard({ product }: ProductCardProps) {
+export function ProductCard({ product, hideWishlist }: ProductCardProps) {
     const { isInWishlist, addToWishlist, removeFromWishlist } = useStore();
     const isWishlisted = isInWishlist(product.id);
 
@@ -56,17 +57,19 @@ export function ProductCard({ product }: ProductCardProps) {
                 </div>
 
                 {/* Wishlist Button (Always visible on mobile, hover on desktop) */}
-                <Button
-                    size="icon"
-                    variant="secondary"
-                    className={cn(
-                        "absolute top-2 right-2 h-8 w-8 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20",
-                        isWishlisted && "opacity-100 text-red-500 bg-white"
-                    )}
-                    onClick={toggleWishlist}
-                >
-                    <Heart className={cn("h-4 w-4", isWishlisted && "fill-current")} />
-                </Button>
+                {!hideWishlist && (
+                    <Button
+                        size="icon"
+                        variant="secondary"
+                        className={cn(
+                            "absolute top-2 right-2 h-8 w-8 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20",
+                            isWishlisted && "opacity-100 text-red-500 bg-white"
+                        )}
+                        onClick={toggleWishlist}
+                    >
+                        <Heart className={cn("h-4 w-4", isWishlisted && "fill-current")} />
+                    </Button>
+                )}
             </div>
 
             <div className="space-y-1">

@@ -28,6 +28,59 @@ export default function AdminProducts() {
         description: ''
     });
 
+    // --- CATEGORY LOGIC START ---
+    const PREDEFINED_CATEGORIES = [
+        { id: 'kurtis', label: 'Kurtis' },
+        { id: 'sets', label: '3-Piece Sets' },
+        { id: 'daily', label: 'Daily Wear' },
+        { id: 'dresses', label: 'Dresses' },
+        { id: 'traditional', label: 'Traditional' },
+        { id: 'maxis', label: 'Maxis' },
+        { id: 'aline', label: 'A-Line' },
+        { id: 'short', label: 'Short Tops' },
+        { id: 'tot', label: 'TOT Wear' },
+        { id: 'workwear', label: 'Workwear' },
+    ];
+
+    const [customCategories, setCustomCategories] = useState<{ id: string, label: string }[]>([]);
+    const [isAddingCategory, setIsAddingCategory] = useState(false);
+    const [newCategoryName, setNewCategoryName] = useState("");
+
+    useEffect(() => {
+        const saved = localStorage.getItem("kurtis_custom_categories");
+        if (saved) {
+            try {
+                setCustomCategories(JSON.parse(saved));
+            } catch (e) {
+                console.error("Failed to parse custom categories", e);
+            }
+        }
+    }, []);
+
+    const handleAddCategory = () => {
+        if (!newCategoryName.trim()) return;
+
+        const safeId = newCategoryName.toLowerCase().trim().replace(/[^a-z0-9]/g, '-');
+        const newCat = { id: safeId, label: newCategoryName.trim() };
+
+        // Check duplicates
+        const allCats = [...PREDEFINED_CATEGORIES, ...customCategories];
+        if (allCats.some(c => c.id === safeId || c.label.toLowerCase() === newCat.label.toLowerCase())) {
+            alert("Category already exists!");
+            return;
+        }
+
+        const updated = [...customCategories, newCat];
+        setCustomCategories(updated);
+        localStorage.setItem("kurtis_custom_categories", JSON.stringify(updated));
+
+        // Select the new category
+        setNewProduct(prev => ({ ...prev, category: safeId }));
+        setNewCategoryName("");
+        setIsAddingCategory(false);
+    };
+    // --- CATEGORY LOGIC END ---
+
     // 3. Handle File Upload -> Convert to Base64 (Multiple Images)
     const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files.length > 0) {
@@ -114,19 +167,60 @@ export default function AdminProducts() {
                                     onChange={e => setNewProduct({ ...newProduct, name: e.target.value })}
                                 />
                             </div>
+
                             <div className="space-y-2">
                                 <label className="text-sm font-medium">Category</label>
-                                <select
-                                    className="w-full px-3 py-2 border rounded-md bg-background"
-                                    value={newProduct.category}
-                                    onChange={e => setNewProduct({ ...newProduct, category: e.target.value })}
-                                >
-                                    <option value="kurtis">Kurtis</option>
-                                    <option value="workwear">Workwear</option>
-                                    <option value="festive">Festive</option>
-                                    <option value="sets">Sets</option>
-                                    <option value="maxis">Maxis</option>
-                                </select>
+                                {!isAddingCategory ? (
+                                    <div className="flex gap-2">
+                                        <select
+                                            className="w-full px-3 py-2 border rounded-md bg-background"
+                                            value={newProduct.category}
+                                            onChange={e => {
+                                                if (e.target.value === "__NEW__") {
+                                                    setIsAddingCategory(true);
+                                                } else {
+                                                    setNewProduct({ ...newProduct, category: e.target.value });
+                                                }
+                                            }}
+                                        >
+                                            <optgroup label="Predefined">
+                                                {PREDEFINED_CATEGORIES.map(cat => (
+                                                    <option key={cat.id} value={cat.id}>{cat.label}</option>
+                                                ))}
+                                            </optgroup>
+                                            {customCategories.length > 0 && (
+                                                <optgroup label="Custom">
+                                                    {customCategories.map(cat => (
+                                                        <option key={cat.id} value={cat.id}>{cat.label}</option>
+                                                    ))}
+                                                </optgroup>
+                                            )}
+                                            <option value="__NEW__">➕ Add New Category</option>
+                                        </select>
+                                    </div>
+                                ) : (
+                                    <div className="flex gap-2">
+                                        <input
+                                            type="text"
+                                            autoFocus
+                                            placeholder="Enter new category name"
+                                            className="flex-1 px-3 py-2 border rounded-md"
+                                            value={newCategoryName}
+                                            onChange={e => setNewCategoryName(e.target.value)}
+                                            onKeyDown={e => {
+                                                if (e.key === 'Enter') {
+                                                    e.preventDefault();
+                                                    handleAddCategory();
+                                                }
+                                                if (e.key === 'Escape') {
+                                                    setIsAddingCategory(false);
+                                                }
+                                            }}
+                                        />
+                                        <Button type="button" size="sm" onClick={handleAddCategory}>Save</Button>
+                                        <Button type="button" variant="ghost" size="sm" onClick={() => setIsAddingCategory(false)}>Cancel</Button>
+                                    </div>
+                                )}
                             </div>
                             <div className="space-y-2">
                                 <label className="text-sm font-medium">Price (₹)</label>

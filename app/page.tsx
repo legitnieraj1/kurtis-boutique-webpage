@@ -12,6 +12,7 @@ import { LiquidButton } from "@/components/ui/liquid-glass-button";
 
 import { CategoryBubbles } from "@/components/home/CategoryBubbles";
 import { HeroBannerCarousel } from "@/components/ui/HeroBannerCarousel";
+import { NewArrivalsSection } from "@/components/NewArrivalsSection";
 import { useEffect, useState } from "react";
 
 export default function Home() {
@@ -23,8 +24,9 @@ export default function Home() {
     setHydrated(true);
   }, []);
 
-  const bestSellers = products.filter(p => p.isBestSeller);
-  const newArrivals = products.filter(p => p.isNew);
+  // Filter products for New Arrivals section if needed, 
+  // but NewArrivalsSection handles its own filtering based on tabs using the full list.
+  // We can pass the full product list to it.
 
   return (
     <div className="min-h-screen font-sans selection:bg-primary/20">
@@ -77,54 +79,8 @@ export default function Home() {
           </div>
         </section>
 
-        {/* BEST SELLERS */}
-        <section className="py-20 bg-secondary/20">
-          <div className="container mx-auto px-4 md:px-8">
-            <div className="text-center max-w-2xl mx-auto mb-16 space-y-4">
-              <span className="text-primary tracking-widest text-sm font-semibold uppercase">Customer Favorites</span>
-              <h2 className="text-3xl md:text-4xl font-serif">Best Sellers</h2>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
-              {bestSellers.concat(newArrivals).slice(0, 4).map((product) => (
-                <div key={product.id} className="group cursor-pointer">
-                  <div className="relative aspect-[3/4] bg-muted mb-4 overflow-hidden rounded-md text-transparent">
-                    <span className="sr-only">{product.name}</span>
-                    <img
-                      src={product.images[0]}
-                      alt={product.name}
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                    />
-                    {product.discountPrice && (
-                      <div className="absolute top-2 left-2 bg-red-500 text-white text-xs px-2 py-1 rounded-sm z-10">
-                        SALE
-                      </div>
-                    )}
-                  </div>
-                  <h3 className="font-serif text-lg group-hover:text-primary transition-colors">{product.name}</h3>
-                  <div className="flex items-center gap-2 mt-1">
-                    {product.discountPrice ? (
-                      <>
-                        <span className="text-primary font-medium">{formatPrice(product.discountPrice)}</span>
-                        <span className="text-muted-foreground line-through text-sm">{formatPrice(product.price)}</span>
-                      </>
-                    ) : (
-                      <span className="font-medium text-foreground">{formatPrice(product.price)}</span>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <div className="text-center mt-12">
-              <Link href="/shop">
-                <LiquidButton className="rounded-full px-12 border-primary text-primary hover:bg-primary hover:text-white">
-                  View All Products
-                </LiquidButton>
-              </Link>
-            </div>
-          </div>
-        </section>
+        {/* NEW ARRIVALS (REPLACING BEST SELLERS) */}
+        <NewArrivalsSection products={products} />
 
         {/* FESTIVE HIGHLIGHT */}
         <section className="py-24 bg-primary text-primary-foreground relative overflow-hidden">

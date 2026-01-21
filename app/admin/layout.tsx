@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { LayoutDashboard, Package, LogOut, Images } from "lucide-react";
+import { LayoutDashboard, Package, LogOut, Images, ShoppingBag } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useStore } from "@/lib/store";
 
@@ -46,6 +46,7 @@ export default function AdminLayout({
     const navItems = [
         { href: "/admin/dashboard", label: "Dashboard", icon: LayoutDashboard },
         { href: "/admin/products", label: "Products", icon: Package },
+        { href: "/admin/orders", label: "Orders", icon: ShoppingBag },
         { href: "/admin/banners", label: "Banners", icon: Images },
     ];
 
