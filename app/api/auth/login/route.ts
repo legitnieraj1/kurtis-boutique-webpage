@@ -13,7 +13,8 @@ export async function POST(request: Request) {
 
         await loginUser({ id: user.id, email: user.email, role: user.role });
         return NextResponse.json({ success: true, role: user.role });
-    } catch (error) {
-        return NextResponse.json({ error: 'Login failed' }, { status: 500 });
+    } catch (error: any) {
+        console.error('Login error:', error);
+        return NextResponse.json({ error: `Login failed: ${error.message}` }, { status: 500 });
     }
 }
