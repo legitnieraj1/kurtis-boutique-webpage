@@ -3,29 +3,51 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Link as HomeLink } from "lucide-react";
 import { useStore } from "@/lib/store";
 import Link from "next/link";
+import { toast } from "sonner"; // Assuming sonner is installed as per package.json
 
 export default function AdminLogin() {
     const [loading, setLoading] = useState(false);
     const { login } = useStore();
     const router = useRouter();
+    const [formData, setFormData] = useState({
+        email: "",
+        password: ""
+    });
 
-    const handleLogin = (e: React.FormEvent) => {
+    const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
 
-        // Simulate login validation
-        // In a real app, this would verify credentials against a backend
-        setTimeout(() => {
-            login({
-                name: "Admin User",
-                email: "admin@kurtis.com",
-                role: "admin",
+        try {
+            const res = await fetch('/api/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formData)
             });
+
+            const data = await res.json();
+
+            if (!res.ok) {
+                throw new Error(data.error || 'Login failed');
+            }
+
+            // Update local store
+            login({
+                name: "Admin",
+                email: formData.email,
+                role: data.role
+            });
+
+            toast.success("Welcome back!");
             router.push("/admin/dashboard");
-        }, 1000);
+            router.refresh(); // Ensure server components revalidate
+        } catch (error: any) {
+            toast.error(error.message);
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -39,11 +61,25 @@ export default function AdminLogin() {
                 <form onSubmit={handleLogin} className="space-y-4">
                     <div className="space-y-2">
                         <label className="text-sm font-medium">Email</label>
-                        <input type="email" required className="w-full px-3 py-2 border rounded-md" placeholder="admin@kurtis.com" />
+                        <input
+                            type="email"
+                            required
+                            className="w-full px-3 py-2 border rounded-md"
+                            placeholder="admin@kurtis.com"
+                            value={formData.email}
+                            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                        />
                     </div>
                     <div className="space-y-2">
                         <label className="text-sm font-medium">Password</label>
-                        <input type="password" required className="w-full px-3 py-2 border rounded-md" placeholder="••••••••" />
+                        <input
+                            type="password"
+                            required
+                            className="w-full px-3 py-2 border rounded-md"
+                            placeholder="••••••••"
+                            value={formData.password}
+                            onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                        />
                     </div>
                     <Button className="w-full" disabled={loading}>
                         {loading ? "Signing in..." : "Sign In"}
