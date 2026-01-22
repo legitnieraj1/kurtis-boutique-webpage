@@ -20,29 +20,24 @@ export default function AdminLogin() {
         e.preventDefault();
         setLoading(true);
 
+        // Mock login for frontend-only mode
         try {
-            const res = await fetch('/api/auth/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(formData)
-            });
+            await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate returning promise
 
-            const data = await res.json();
-
-            if (!res.ok) {
-                throw new Error(data.error || 'Login failed');
+            // Allow any credentials for now since backend is removed
+            if (formData.email && formData.password) {
+                login({
+                    name: "Admin",
+                    email: formData.email,
+                    role: "admin"
+                });
+                toast.success("Welcome back! (Frontend Mode)");
+                router.push("/admin/dashboard");
+                router.refresh();
+            } else {
+                throw new Error("Please enter email and password");
             }
 
-            // Update local store
-            login({
-                name: "Admin",
-                email: formData.email,
-                role: data.role
-            });
-
-            toast.success("Welcome back!");
-            router.push("/admin/dashboard");
-            router.refresh(); // Ensure server components revalidate
         } catch (error: any) {
             toast.error(error.message);
         } finally {
