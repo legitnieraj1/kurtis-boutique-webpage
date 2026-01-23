@@ -76,24 +76,24 @@
   /* Soft Charcoal Text */
   --foreground: #2D2D2D;
 
-  /* Luxury Gold */
-  --primary: #C5A059;
+  /* Deep Wine */
+  --primary: #801848;
   --primary-foreground: #FFFFFF;
 
-  /* Soft Beige */
-  --secondary: #F2E8D5;
-  --secondary-foreground: #2D2D2D;
+  /* Rose Mauve */
+  --secondary: #B05480;
+  --secondary-foreground: #FFFFFF;
 
   /* Muted Text */
   --muted: #F4F1EA;
   --muted-foreground: #787878;
 
-  /* Pastel Accent */
-  --accent: #FAE1DD;
+  /* Soft Blush Accent */
+  --accent: #D48CA8;
   --accent-foreground: #2D2D2D;
 
   /* Borders */
-  --border: #E6E0D4;
+  --border: #E8D8E0;
 }
 
 body {

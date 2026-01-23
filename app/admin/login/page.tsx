@@ -31,7 +31,7 @@ export default function AdminLogin() {
                     email: formData.email,
                     role: "admin"
                 });
-                toast.success("Welcome back! (Frontend Mode)");
+                toast.success("Welcome back!");
                 router.push("/admin/dashboard");
                 router.refresh();
             } else {

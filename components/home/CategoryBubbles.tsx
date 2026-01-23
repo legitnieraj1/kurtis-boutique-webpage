@@ -17,11 +17,17 @@ export function CategoryBubbles() {
                         >
                             <div className="relative p-[2px] rounded-full bg-gradient-to-tr from-primary/20 to-primary/5 group-hover:from-primary group-hover:to-primary/60 transition-all duration-300">
                                 <div className="w-20 h-20 md:w-24 md:h-24 rounded-full border-4 border-background overflow-hidden relative bg-secondary/30">
-                                    <img
-                                        src={cat.image}
-                                        alt={cat.name}
-                                        className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-110"
-                                    />
+                                    {cat.image ? (
+                                        <img
+                                            src={cat.image}
+                                            alt={cat.name}
+                                            className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-110"
+                                        />
+                                    ) : (
+                                        <div className="w-full h-full flex items-center justify-center bg-stone-200 text-stone-400 font-serif text-lg">
+                                            {cat.name.charAt(0)}
+                                        </div>
+                                    )}
                                 </div>
                             </div>
 

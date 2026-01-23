@@ -1,5 +1,6 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { persist, createJSONStorage, StateStorage } from 'zustand/middleware';
+import { get, set, del } from 'idb-keyval';
 
 export type Banner = {
     id: number;
@@ -20,23 +21,36 @@ interface BannerState {
 const INITIAL_BANNERS: Banner[] = [
     {
         id: 1,
-        image: "https://images.unsplash.com/photo-1558769132-cb1aea458c5e?q=80&w=2274&auto=format&fit=crop",
+        image: "",
         link: "/shop?category=new-arrivals",
         isActive: true,
     },
     {
         id: 2,
-        image: "https://images.unsplash.com/photo-1618220179428-22790b461013?q=80&w=2500&auto=format&fit=crop",
+        image: "",
         link: "/shop?category=festive",
         isActive: true,
     },
     {
         id: 3,
-        image: "https://images.unsplash.com/photo-1525507119028-ed4c629a60a3?q=80&w=2335&auto=format&fit=crop",
+        image: "",
         link: "/shop?category=custom",
         isActive: true,
     },
 ];
+
+// Custom storage adapter for IndexedDB
+const storage: StateStorage = {
+    getItem: async (name: string): Promise<string | null> => {
+        return (await get(name)) || null;
+    },
+    setItem: async (name: string, value: string): Promise<void> => {
+        await set(name, value);
+    },
+    removeItem: async (name: string): Promise<void> => {
+        await del(name);
+    },
+};
 
 export const useBannerStore = create<BannerState>()(
     persist(
@@ -72,6 +86,7 @@ export const useBannerStore = create<BannerState>()(
         }),
         {
             name: 'hero-banner-storage',
+            storage: createJSONStorage(() => storage),
         }
     )
 );

@@ -29,11 +29,17 @@ export function BannerRow({ banner, index, total, onEdit }: BannerRowProps) {
             {/* Banner Image & Info */}
             <div className="col-span-4 flex items-center gap-4">
                 <div className="relative w-24 h-14 rounded-md overflow-hidden bg-stone-100 shrink-0 border border-stone-200">
-                    <img
-                        src={banner.image}
-                        alt={`Banner ${banner.id}`}
-                        className="w-full h-full object-cover"
-                    />
+                    {banner.image ? (
+                        <img
+                            src={banner.image}
+                            alt={`Banner ${banner.id}`}
+                            className="w-full h-full object-cover"
+                        />
+                    ) : (
+                        <div className="w-full h-full flex items-center justify-center text-stone-300 text-xs">
+                            No Img
+                        </div>
+                    )}
                 </div>
             </div>
 

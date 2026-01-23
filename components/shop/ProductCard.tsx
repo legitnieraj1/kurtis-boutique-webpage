@@ -19,6 +19,7 @@ export function ProductCard({ product, hideWishlist }: ProductCardProps) {
 
     const toggleWishlist = (e: React.MouseEvent) => {
         e.preventDefault(); // Prevent navigation
+        e.stopPropagation(); // Prevent parent clicks
         if (isWishlisted) {
             removeFromWishlist(product.id);
         } else {
@@ -30,12 +31,17 @@ export function ProductCard({ product, hideWishlist }: ProductCardProps) {
         <div className="group relative flex flex-col gap-2">
             <div className="relative aspect-[3/4] overflow-hidden rounded-lg bg-secondary/10">
                 <Link href={`/product/${product.slug}`} className="block w-full h-full">
-                    <div className="absolute inset-0 bg-stone-200 animate-pulse-slow" />
-                    <img
-                        src={product.images[0]}
-                        alt={product.name}
-                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                    />
+                    {product.images[0] ? (
+                        <img
+                            src={product.images[0]}
+                            alt={product.name}
+                            className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                        />
+                    ) : (
+                        <div className="absolute inset-0 bg-stone-200 flex items-center justify-center text-stone-400">
+                            <span className="text-xs">No Image</span>
+                        </div>
+                    )}
 
                     {!product.inStock && (
                         <div className="absolute inset-0 bg-background/50 backdrop-blur-[1px]" />
@@ -58,17 +64,16 @@ export function ProductCard({ product, hideWishlist }: ProductCardProps) {
 
                 {/* Wishlist Button (Always visible on mobile, hover on desktop) */}
                 {!hideWishlist && (
-                    <Button
-                        size="icon"
-                        variant="secondary"
+                    <button
+                        type="button"
                         className={cn(
-                            "absolute top-2 right-2 h-8 w-8 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20",
+                            "absolute top-2 right-2 h-8 w-8 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20 inline-flex items-center justify-center bg-secondary text-secondary-foreground hover:bg-secondary/80",
                             isWishlisted && "opacity-100 text-red-500 bg-white"
                         )}
                         onClick={toggleWishlist}
                     >
                         <Heart className={cn("h-4 w-4", isWishlisted && "fill-current")} />
-                    </Button>
+                    </button>
                 )}
             </div>
 

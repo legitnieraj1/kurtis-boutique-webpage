@@ -56,8 +56,8 @@ export function BannerForm({ initialData, onClose }: BannerFormProps) {
         if (!file) return;
 
         // Simple validation
-        if (file.size > 5 * 1024 * 1024) {
-            alert("File is too large. Please choose an image under 5MB.");
+        if (file.size > 20 * 1024 * 1024) {
+            alert("File is too large. Please choose an image under 20MB.");
             return;
         }
 
@@ -169,7 +169,7 @@ export function BannerForm({ initialData, onClose }: BannerFormProps) {
                             </div>
                             <div className="text-center">
                                 <p className="text-sm font-medium text-stone-700">Click to upload image</p>
-                                <p className="text-xs text-stone-400">SVG, PNG, JPG or GIF (max. 5MB)</p>
+                                <p className="text-xs text-stone-400">SVG, PNG, JPG or GIF (max. 20MB)</p>
                             </div>
                         </div>
                     )}

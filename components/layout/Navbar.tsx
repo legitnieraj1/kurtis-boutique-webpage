@@ -33,14 +33,30 @@ export function Navbar() {
         <>
             <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/80 backdrop-blur-md">
                 <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="flex h-16 items-center justify-between">
-                        {/* Logo */}
-                        <Link href="/" className="font-serif text-2xl font-bold tracking-tighter text-foreground">
-                            Kurtis Boutique
+                    <div className="flex h-24 items-center justify-between relative">
+                        {/* Mobile Left Icons: Login & Wishlist */}
+                        <div className="flex items-center gap-3 md:hidden z-40">
+                            {!user && (
+                                <Link href="/login">
+                                    <Button variant="ghost" size="icon">
+                                        <UserIcon className="h-5 w-5" />
+                                    </Button>
+                                </Link>
+                            )}
+                            <Link href="/wishlist">
+                                <Button variant="ghost" size="icon">
+                                    <Heart className="h-5 w-5" />
+                                </Button>
+                            </Link>
+                        </div>
+
+                        {/* Logo - Centered on Mobile, Left on Desktop */}
+                        <Link href="/" className="absolute top-1/2 -translate-y-1/2 z-50 left-1/2 -translate-x-1/2 md:left-0 md:translate-x-0">
+                            <img src="/kurtis-logo-large.png" alt="Kurtis Boutique" className="h-16 md:h-40 w-auto object-contain drop-shadow-sm md:transform md:-translate-x-2" />
                         </Link>
 
                         {/* Desktop Nav */}
-                        <nav className="hidden md:flex items-center gap-8">
+                        <nav className="hidden md:flex items-center gap-8 ml-60">
                             {links.map((link) => (
                                 <Link
                                     key={link.href}
@@ -52,28 +68,31 @@ export function Navbar() {
                             ))}
                         </nav>
 
-                        {/* Icons */}
-                        <div className="flex items-center gap-4">
-                            <Button variant="ghost" size="icon" className="hidden sm:flex" onClick={() => setIsSearchOpen(true)}>
+                        {/* Right Icons: Desktop (All) / Mobile (Cart & Menu only) */}
+                        <div className="flex items-center gap-4 z-40">
+                            {/* Search: Desktop Only */}
+                            <Button variant="ghost" size="icon" className="hidden md:flex" onClick={() => setIsSearchOpen(true)}>
                                 <Search className="h-5 w-5" />
                             </Button>
 
+                            {/* User: Desktop Only (Mobile is on Left) */}
                             {mounted && user ? (
-                                <div className="flex items-center gap-2">
+                                <div className="hidden md:flex items-center gap-2">
                                     <span className="text-sm font-medium hidden lg:inline-block">Hi, {user.name}</span>
                                     <Button variant="ghost" size="icon" onClick={() => logout()}>
                                         <UserIcon className="h-5 w-5" />
                                     </Button>
                                 </div>
                             ) : (
-                                <Link href="/login" className="hidden sm:block">
+                                <Link href="/login" className="hidden md:block">
                                     <Button variant="ghost" size="sm" className="font-medium">
                                         Login
                                     </Button>
                                 </Link>
                             )}
 
-                            <Link href="/wishlist">
+                            {/* Wishlist: Desktop Only (Mobile is on Left) */}
+                            <Link href="/wishlist" className="hidden md:flex">
                                 <Button variant="ghost" size="icon">
                                     <Heart className="h-5 w-5" />
                                 </Button>

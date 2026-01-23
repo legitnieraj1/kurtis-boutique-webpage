@@ -5,9 +5,10 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Product } from "@/data/products";
 import { ProductCard } from "@/components/shop/ProductCard";
 import { cn } from "@/lib/utils";
+import { useProductStore } from "@/lib/store";
 
 interface NewArrivalsSectionProps {
-    products: Product[];
+    // products: Product[]; // Removed prop
 }
 
 const TABS = [
@@ -19,7 +20,8 @@ const TABS = [
     { id: "tot", label: "TOT Wear" },
 ] as const;
 
-export function NewArrivalsSection({ products }: NewArrivalsSectionProps) {
+export function NewArrivalsSection() {
+    const { products } = useProductStore();
     const [activeTab, setActiveTab] = useState<typeof TABS[number]["id"]>("kurti-coord");
 
     const filteredProducts = useMemo(() => {

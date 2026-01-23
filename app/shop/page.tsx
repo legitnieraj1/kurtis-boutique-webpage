@@ -5,7 +5,6 @@ import { useSearchParams } from "next/navigation";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { ProductCard } from "@/components/shop/ProductCard";
-import { CATEGORIES } from "@/data/products"; // PRODUCTS removed
 import { useProductStore } from "@/lib/store";
 import { Button } from "@/components/ui/button";
 import { Check, SlidersHorizontal } from "lucide-react";
@@ -16,7 +15,7 @@ function ShopContent() {
     const searchParams = useSearchParams();
     const initialCategory = searchParams.get("category");
 
-    const { products } = useProductStore();
+    const { products, categories } = useProductStore();
     const [hydrated, setHydrated] = useState(false);
 
     useEffect(() => {
@@ -45,7 +44,7 @@ function ShopContent() {
         }
 
         return result;
-    }, [selectedCategory, sortBy]);
+    }, [selectedCategory, sortBy, products]);
 
     return (
         <div className="min-h-screen bg-background/60 backdrop-blur-sm">
@@ -96,7 +95,7 @@ function ShopContent() {
                                     All Products
                                     {!selectedCategory && <Check className="w-4 h-4" />}
                                 </button>
-                                {CATEGORIES.map(cat => (
+                                {categories && categories.map(cat => (
                                     <button
                                         key={cat.id}
                                         onClick={() => setSelectedCategory(cat.id)}

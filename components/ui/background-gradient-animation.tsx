@@ -5,12 +5,12 @@ import { useTheme } from "next-themes";
 import { useEffect, useRef, useState } from "react";
 
 export const BackgroundGradientAnimation = ({
-    firstColor = "242, 0, 137",
-    secondColor = "209, 0, 209",
-    thirdColor = "161, 0, 242",
-    fourthColor = "45, 0, 247",
-    fifthColor = "242, 0, 137",
-    pointerColor = "209, 0, 209",
+    firstColor = "128, 24, 72",
+    secondColor = "176, 84, 128",
+    thirdColor = "212, 140, 168",
+    fourthColor = "180, 120, 150",
+    fifthColor = "150, 60, 100",
+    pointerColor = "176, 84, 128",
     size = "80%",
     blendingValue = "hard-light",
     children,
@@ -52,8 +52,8 @@ export const BackgroundGradientAnimation = ({
         setMounted(true); // Hydration mismatch fix
     }, []);
 
-    const gradientBackgroundStart = "rgb(255, 255, 255)"; // Light background
-    const gradientBackgroundEnd = "rgb(253, 251, 247)";   // Ivory/Cream
+    const gradientBackgroundStart = "rgb(250, 248, 245)"; // Soft Champagne/Ivory
+    const gradientBackgroundEnd = "rgb(250, 248, 245)";   // Soft Champagne/Ivory
 
     useEffect(() => {
         document.body.style.setProperty(

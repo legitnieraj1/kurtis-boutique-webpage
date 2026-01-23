@@ -39,22 +39,50 @@ export function HeroBannerCarousel() {
     if (activeBanners.length === 0) return null;
 
     return (
-        <div className="relative w-full h-full overflow-hidden group">
-            <Link href={activeBanners[currentIndex].link} className="block w-full h-full relative">
+        <motion.div
+            className="relative w-full h-full overflow-hidden group"
+            drag="x"
+            dragConstraints={{ left: 0, right: 0 }}
+            dragElastic={0.05}
+            onDragEnd={(e, { offset, velocity }) => {
+                const swipe = offset.x; // pull to right is positive (prev)
+
+                if (swipe < -50) {
+                    // Swiped Left -> Next
+                    setCurrentIndex((prev) => (prev + 1) % activeBanners.length);
+                } else if (swipe > 50) {
+                    // Swiped Right -> Prev
+                    setCurrentIndex((prev) => (prev - 1 + activeBanners.length) % activeBanners.length);
+                }
+            }}
+        >
+            <Link href={activeBanners[currentIndex].link} className="block w-full h-full relative cursor-grab active:cursor-grabbing">
                 <AnimatePresence mode="popLayout">
-                    <motion.img
-                        key={activeBanners[currentIndex].id}
-                        src={activeBanners[currentIndex].image}
-                        alt="Hero Banner"
-                        className="absolute inset-0 w-full h-full object-cover"
-                        initial={{ opacity: 0, scale: 1.05, x: 20 }}
-                        animate={{ opacity: 1, scale: 1, x: 0 }}
-                        exit={{ opacity: 0, x: -20 }}
-                        transition={{
-                            duration: 1.2,
-                            ease: [0.16, 1, 0.3, 1],
-                        }}
-                    />
+                    {activeBanners[currentIndex].image ? (
+                        <motion.img
+                            key={activeBanners[currentIndex].id}
+                            src={activeBanners[currentIndex].image}
+                            alt="Hero Banner"
+                            className="absolute inset-0 w-full h-full object-cover"
+                            initial={{ opacity: 0, scale: 1.05, x: 20 }}
+                            animate={{ opacity: 1, scale: 1, x: 0 }}
+                            exit={{ opacity: 0, x: -20 }}
+                            transition={{
+                                duration: 1.2,
+                                ease: [0.16, 1, 0.3, 1],
+                            }}
+                        />
+                    ) : (
+                        <motion.div
+                            key={`placeholder-${activeBanners[currentIndex].id}`}
+                            className="absolute inset-0 w-full h-full bg-gradient-to-br from-purple-900 to-indigo-900 flex items-center justify-center text-white/50"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                        >
+                            <span className="text-2xl font-serif">Banner {activeBanners[currentIndex].id}</span>
+                        </motion.div>
+                    )}
                 </AnimatePresence>
                 <div className="absolute inset-0 bg-black/5 pointer-events-none" />
             </Link>
@@ -62,7 +90,7 @@ export function HeroBannerCarousel() {
             {/* Manual Navigation - Left Arrow */}
             <button
                 onClick={handlePrev}
-                className="absolute left-4 top-1/2 -translate-y-1/2 z-20 p-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white opacity-0 group-hover:opacity-100 transition-opacity hover:bg-white/20"
+                className="absolute left-4 top-1/2 -translate-y-1/2 z-20 p-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity hover:bg-white/20"
                 aria-label="Previous Slide"
             >
                 <ChevronLeft className="w-6 h-6" />
@@ -71,7 +99,7 @@ export function HeroBannerCarousel() {
             {/* Manual Navigation - Right Arrow */}
             <button
                 onClick={handleNext}
-                className="absolute right-4 top-1/2 -translate-y-1/2 z-20 p-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white opacity-0 group-hover:opacity-100 transition-opacity hover:bg-white/20"
+                className="absolute right-4 top-1/2 -translate-y-1/2 z-20 p-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity hover:bg-white/20"
                 aria-label="Next Slide"
             >
                 <ChevronRight className="w-6 h-6" />
@@ -93,6 +121,6 @@ export function HeroBannerCarousel() {
                     ))}
                 </div>
             )}
-        </div>
+        </motion.div>
     );
 }

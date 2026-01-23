@@ -5,12 +5,12 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
-import { PRODUCTS } from "@/data/products";
 import { formatPrice, cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Heart, Minus, Plus, Share2, Truck, ShieldCheck, RefreshCw } from "lucide-react";
 import { toast } from "sonner";
 import { useStore, useProductStore } from "@/lib/store";
+import { CustomisationForm } from "@/components/product/CustomisationForm";
 
 export default function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
     const { slug } = use(params);
@@ -87,12 +87,17 @@ export default function ProductPage({ params }: { params: Promise<{ slug: string
                     <div className="w-full md:w-1/2 space-y-4">
                         {/* Main Image */}
                         <div className="relative aspect-[3/4] bg-secondary/20 rounded-lg overflow-hidden group">
-                            <div className="absolute inset-0 bg-stone-200 animate-pulse-slow" />
-                            <img
-                                src={activeImage}
-                                alt={product.name}
-                                className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                            />
+                            {activeImage ? (
+                                <img
+                                    src={activeImage}
+                                    alt={product.name}
+                                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                                />
+                            ) : (
+                                <div className="absolute inset-0 bg-stone-200 flex items-center justify-center text-stone-400">
+                                    <span>No Image Available</span>
+                                </div>
+                            )}
                         </div>
 
                         {/* Thumbnails */}
@@ -227,6 +232,10 @@ export default function ProductPage({ params }: { params: Promise<{ slug: string
                         </div>
                     </div>
                 </div>
+
+                {/* Customisation Form */}
+                <CustomisationForm productId={product.id} productName={product.name} />
+
             </main>
 
             <Footer />

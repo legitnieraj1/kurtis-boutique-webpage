@@ -14,16 +14,16 @@ export interface Product {
 }
 
 export const CATEGORIES = [
-    { id: 'kurtis', name: 'Kurtis', image: 'https://images.unsplash.com/photo-1583391733958-e026ce199d25?auto=format&fit=crop&w=800&q=80' },
-    { id: 'sets', name: '3-Piece Sets', image: 'https://images.unsplash.com/photo-1631233859262-43642340d8aa?auto=format&fit=crop&w=800&q=80' },
-    { id: 'daily', name: 'Daily Wear', image: 'https://images.unsplash.com/photo-1503342394128-c104d54dba01?auto=format&fit=crop&w=800&q=80' },
-    { id: 'dresses', name: 'Dresses', image: 'https://images.unsplash.com/photo-1596783074918-c84cb06c929e?auto=format&fit=crop&w=800&q=80' },
-    { id: 'traditional', name: 'Traditional', image: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=800&q=80' },
-    { id: 'maxis', name: 'Maxis', image: 'https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?auto=format&fit=crop&w=800&q=80' },
-    { id: 'aline', name: 'A-Line', image: 'https://images.unsplash.com/photo-1496747611176-843222e1e57c?auto=format&fit=crop&w=800&q=80' },
-    { id: 'short', name: 'Short Tops', image: 'https://images.unsplash.com/photo-1525507119028-ed4c629a60a3?auto=format&fit=crop&w=800&q=80' },
-    { id: 'tot', name: 'TOT Wear', image: 'https://images.unsplash.com/photo-1529139574466-a302d27f819b?auto=format&fit=crop&w=800&q=80' },
-    { id: 'workwear', name: 'Workwear', image: 'https://images.unsplash.com/photo-1574227492706-f65b24c3688a?auto=format&fit=crop&w=800&q=80' },
+    { id: 'kurtis', name: 'Kurtis', image: '' },
+    { id: 'sets', name: '3-Piece Sets', image: '' },
+    { id: 'daily', name: 'Daily Wear', image: '' },
+    { id: 'dresses', name: 'Dresses', image: '' },
+    { id: 'traditional', name: 'Traditional', image: '' },
+    { id: 'maxis', name: 'Maxis', image: '' },
+    { id: 'aline', name: 'A-Line', image: '' },
+    { id: 'short', name: 'Short Tops', image: '' },
+    { id: 'tot', name: 'TOT Wear', image: '' },
+    { id: 'workwear', name: 'Workwear', image: '' },
 ];
 
 export const PRODUCTS: Product[] = [
@@ -35,7 +35,7 @@ export const PRODUCTS: Product[] = [
         price: 1299,
         discountPrice: 999,
         images: [
-            'https://images.unsplash.com/photo-1583391733958-e026ce199d25?auto=format&fit=crop&w=800&q=80'
+            ''
         ],
         sizes: ['S', 'M', 'L', 'XL'],
         inStock: true,
@@ -49,7 +49,7 @@ export const PRODUCTS: Product[] = [
         description: 'Premium silk three-piece set with heavy gold zari work. Ideal for weddings and festivals.',
         price: 4599,
         images: [
-            'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=800&q=80'
+            ''
         ],
         sizes: ['M', 'L', 'XL'],
         inStock: true,
@@ -63,7 +63,7 @@ export const PRODUCTS: Product[] = [
         description: 'Modern minimalist co-ord set for the professional woman.',
         price: 2499,
         images: [
-            'https://images.unsplash.com/photo-1574227492706-f65b24c3688a?auto=format&fit=crop&w=800&q=80'
+            ''
         ],
         sizes: ['S', 'M', 'L'],
         inStock: true,
@@ -77,7 +77,7 @@ export const PRODUCTS: Product[] = [
         price: 1899,
         discountPrice: 1599,
         images: [
-            'https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?auto=format&fit=crop&w=800&q=80'
+            ''
         ],
         sizes: ['S', 'M', 'L', 'XL', 'XXL'],
         inStock: true,
@@ -90,7 +90,7 @@ export const PRODUCTS: Product[] = [
         description: 'Elegant 3-piece cotton suit set with dupatta.',
         price: 2999,
         images: [
-            'https://images.unsplash.com/photo-1631233859262-43642340d8aa?auto=format&fit=crop&w=800&q=80'
+            ''
         ],
         sizes: ['M', 'L', 'XL'],
         inStock: true,
@@ -103,7 +103,7 @@ export const PRODUCTS: Product[] = [
         description: 'Comfortable daily wear kurti with traditional hand block prints.',
         price: 899,
         images: [
-            'https://images.unsplash.com/photo-1503342394128-c104d54dba01?auto=format&fit=crop&w=800&q=80'
+            ''
         ],
         sizes: ['S', 'M', 'L', 'XL'],
         inStock: true,
@@ -117,7 +117,7 @@ export const PRODUCTS: Product[] = [
         price: 1499,
         discountPrice: 1299,
         images: [
-            'https://images.unsplash.com/photo-1596783074918-c84cb06c929e?auto=format&fit=crop&w=800&q=80'
+            ''
         ],
         sizes: ['S', 'M', 'L'],
         inStock: true,
@@ -130,7 +130,7 @@ export const PRODUCTS: Product[] = [
         description: 'Rich silk anarkali suit with heavy embroidery.',
         price: 5999,
         images: [
-            'https://images.unsplash.com/photo-1580820759082-5ce8c0bc1353?auto=format&fit=crop&w=800&q=80'
+            ''
         ],
         sizes: ['M', 'L', 'XL', 'XXL'],
         inStock: true,
@@ -143,7 +143,7 @@ export const PRODUCTS: Product[] = [
         description: 'Stylish A-line kurta in pastel pink.',
         price: 1199,
         images: [
-            'https://images.unsplash.com/photo-1496747611176-843222e1e57c?auto=format&fit=crop&w=800&q=80'
+            ''
         ],
         sizes: ['S', 'M', 'L', 'XL'],
         inStock: true,
@@ -156,7 +156,7 @@ export const PRODUCTS: Product[] = [
         description: 'Trendy short tunic top that pairs perfectly with jeans.',
         price: 799,
         images: [
-            'https://images.unsplash.com/photo-1525507119028-ed4c629a60a3?auto=format&fit=crop&w=800&q=80'
+            ''
         ],
         sizes: ['XS', 'S', 'M', 'L'],
         inStock: true,
@@ -169,7 +169,7 @@ export const PRODUCTS: Product[] = [
         description: 'Contemporary fusion wear featuring a stylish jacket.',
         price: 3499,
         images: [
-            'https://images.unsplash.com/photo-1529139574466-a302d27f819b?auto=format&fit=crop&w=800&q=80'
+            ''
         ],
         sizes: ['S', 'M', 'L'],
         inStock: true,
@@ -183,7 +183,7 @@ export const PRODUCTS: Product[] = [
         description: 'Luxurious maroon velvet kurti with golden embroidery.',
         price: 1999,
         images: [
-            'https://images.unsplash.com/photo-1550614000-4b9519e09d6f?auto=format&fit=crop&w=800&q=80'
+            ''
         ],
         sizes: ['M', 'L', 'XL'],
         inStock: true,
@@ -196,7 +196,7 @@ export const PRODUCTS: Product[] = [
         description: 'Flowy georgette gown with heavy embellished dupatta.',
         price: 4999,
         images: [
-            'https://images.unsplash.com/photo-1589810635657-232948472d98?auto=format&fit=crop&w=800&q=80'
+            ''
         ],
         sizes: ['S', 'M', 'L'],
         inStock: true,
@@ -210,7 +210,7 @@ export const PRODUCTS: Product[] = [
         description: 'Soft cotton printed kurti, ideal for summer days.',
         price: 699,
         images: [
-            'https://images.unsplash.com/photo-1512413914633-b5043f4041ea?auto=format&fit=crop&w=800&q=80'
+            ''
         ],
         sizes: ['XS', 'S', 'M', 'L', 'XL'],
         inStock: true,
@@ -223,7 +223,7 @@ export const PRODUCTS: Product[] = [
         description: 'Sophisticated evening dress in midnight blue.',
         price: 2599,
         images: [
-            'https://images.unsplash.com/photo-1566174053879-31528523f8ae?auto=format&fit=crop&w=800&q=80'
+            ''
         ],
         sizes: ['S', 'M', 'L'],
         inStock: true,
@@ -237,7 +237,7 @@ export const PRODUCTS: Product[] = [
         description: 'Vibrant yellow sharara set with mirror work.',
         price: 3999,
         images: [
-            'https://images.unsplash.com/photo-1595341888016-a392ef81b7de?auto=format&fit=crop&w=800&q=80'
+            ''
         ],
         sizes: ['M', 'L', 'XL'],
         inStock: true,
@@ -251,7 +251,7 @@ export const PRODUCTS: Product[] = [
         description: 'Bohemian style maxi dress with earthy tones.',
         price: 2199,
         images: [
-            'https://images.unsplash.com/photo-1496747611176-843222e1e57c?auto=format&fit=crop&w=800&q=80'
+            ''
         ],
         sizes: ['S', 'M', 'L'],
         inStock: true,
@@ -264,7 +264,7 @@ export const PRODUCTS: Product[] = [
         description: 'Classic indigo printed A-line kurta.',
         price: 1099,
         images: [
-            'https://images.unsplash.com/photo-1547900723-cd875b7b0553?auto=format&fit=crop&w=800&q=80'
+            ''
         ],
         sizes: ['S', 'M', 'L', 'XL'],
         inStock: true,
@@ -277,7 +277,7 @@ export const PRODUCTS: Product[] = [
         description: 'Chic crop top with embroidery details.',
         price: 899,
         images: [
-            'https://images.unsplash.com/photo-1525507119028-ed4c629a60a3?auto=format&fit=crop&w=800&q=80'
+            ''
         ],
         sizes: ['XS', 'S', 'M'],
         inStock: true,
@@ -290,7 +290,7 @@ export const PRODUCTS: Product[] = [
         description: 'Edgy urban wear set for the modern youth.',
         price: 2799,
         images: [
-            'https://images.unsplash.com/photo-1529139574466-a302d27f819b?auto=format&fit=crop&w=800&q=80'
+            ''
         ],
         sizes: ['S', 'M', 'L'],
         inStock: true,
@@ -303,7 +303,7 @@ export const PRODUCTS: Product[] = [
         description: 'Professional blazer and trouser set in charcoal grey.',
         price: 3499,
         images: [
-            'https://images.unsplash.com/photo-1574227492706-f65b24c3688a?auto=format&fit=crop&w=800&q=80'
+            ''
         ],
         sizes: ['S', 'M', 'L', 'XL'],
         inStock: true,

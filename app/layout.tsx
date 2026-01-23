@@ -42,12 +42,12 @@ export default function RootLayout({
             // So removing pointer-events-none from container should be fine.
             className="absolute inset-0"
             interactive={true}
-            firstColor="197, 160, 89"
-            secondColor="250, 225, 221"
-            thirdColor="242, 232, 213"
-            fourthColor="220, 180, 100"
-            fifthColor="255, 240, 230"
-            pointerColor="197, 160, 89"
+            firstColor="128, 24, 72"
+            secondColor="176, 84, 128"
+            thirdColor="212, 140, 168"
+            fourthColor="180, 120, 150"
+            fifthColor="150, 60, 100"
+            pointerColor="176, 84, 128"
             size="80%"
           />
         </div>

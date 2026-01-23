@@ -9,10 +9,10 @@ import { useProductStore } from "@/lib/store";
 
 export default function AdminProducts() {
     // 1. Get state and actions from the store
-    const { products, addProduct, deleteProduct, toggleStock: toggleStockStore } = useProductStore();
+    const { products, categories, addProduct, deleteProduct, toggleStock: toggleStockStore, addCategory } = useProductStore();
     const [hydrated, setHydrated] = useState(false);
 
-    // 2. Handle hydration to match server/client HTML
+    // 2. Handle hydration
     useEffect(() => {
         useProductStore.persist.rehydrate();
         setHydrated(true);
@@ -28,51 +28,27 @@ export default function AdminProducts() {
         description: ''
     });
 
-    // --- CATEGORY LOGIC START ---
-    const PREDEFINED_CATEGORIES = [
-        { id: 'kurtis', label: 'Kurtis' },
-        { id: 'sets', label: '3-Piece Sets' },
-        { id: 'daily', label: 'Daily Wear' },
-        { id: 'dresses', label: 'Dresses' },
-        { id: 'traditional', label: 'Traditional' },
-        { id: 'maxis', label: 'Maxis' },
-        { id: 'aline', label: 'A-Line' },
-        { id: 'short', label: 'Short Tops' },
-        { id: 'tot', label: 'TOT Wear' },
-        { id: 'workwear', label: 'Workwear' },
-    ];
-
-    const [customCategories, setCustomCategories] = useState<{ id: string, label: string }[]>([]);
     const [isAddingCategory, setIsAddingCategory] = useState(false);
     const [newCategoryName, setNewCategoryName] = useState("");
-
-    useEffect(() => {
-        const saved = localStorage.getItem("kurtis_custom_categories");
-        if (saved) {
-            try {
-                setCustomCategories(JSON.parse(saved));
-            } catch (e) {
-                console.error("Failed to parse custom categories", e);
-            }
-        }
-    }, []);
 
     const handleAddCategory = () => {
         if (!newCategoryName.trim()) return;
 
         const safeId = newCategoryName.toLowerCase().trim().replace(/[^a-z0-9]/g, '-');
-        const newCat = { id: safeId, label: newCategoryName.trim() };
 
         // Check duplicates
-        const allCats = [...PREDEFINED_CATEGORIES, ...customCategories];
-        if (allCats.some(c => c.id === safeId || c.label.toLowerCase() === newCat.label.toLowerCase())) {
+        if (categories.some(c => c.id === safeId || c.name.toLowerCase() === newCategoryName.trim().toLowerCase())) {
             alert("Category already exists!");
             return;
         }
 
-        const updated = [...customCategories, newCat];
-        setCustomCategories(updated);
-        localStorage.setItem("kurtis_custom_categories", JSON.stringify(updated));
+        const newCat = {
+            id: safeId,
+            name: newCategoryName.trim(),
+            image: "" // Default placeholder
+        };
+
+        addCategory(newCat);
 
         // Select the new category
         setNewProduct(prev => ({ ...prev, category: safeId }));
@@ -183,18 +159,10 @@ export default function AdminProducts() {
                                                 }
                                             }}
                                         >
-                                            <optgroup label="Predefined">
-                                                {PREDEFINED_CATEGORIES.map(cat => (
-                                                    <option key={cat.id} value={cat.id}>{cat.label}</option>
-                                                ))}
-                                            </optgroup>
-                                            {customCategories.length > 0 && (
-                                                <optgroup label="Custom">
-                                                    {customCategories.map(cat => (
-                                                        <option key={cat.id} value={cat.id}>{cat.label}</option>
-                                                    ))}
-                                                </optgroup>
-                                            )}
+                                            <option value="" disabled>Select Category</option>
+                                            {(categories || []).map(cat => (
+                                                <option key={cat.id} value={cat.id}>{cat.name}</option>
+                                            ))}
                                             <option value="__NEW__">➕ Add New Category</option>
                                         </select>
                                     </div>
