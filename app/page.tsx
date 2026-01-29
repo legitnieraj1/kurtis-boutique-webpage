@@ -54,7 +54,7 @@ export default function Home() {
         </section>
 
         {/* CATEGORY GRID */}
-        <section className="pt-40 md:pt-64 pb-20 container mx-auto px-4 md:px-8">
+        <section className="pt-40 md:pt-64 pb-20 container mx-auto px-4 md:px-8 hidden md:block">
           <div className="flex justify-between items-end mb-12">
             <h2 className="text-3xl font-serif">Shop by Category</h2>
             <Link href="/shop" className="text-primary hover:underline underline-offset-4 hidden sm:block">View All</Link>

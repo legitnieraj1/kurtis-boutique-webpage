@@ -27,6 +27,18 @@ export function Navbar() {
         setMounted(true);
     }, []);
 
+    // Lock body scroll when mobile menu is open
+    useEffect(() => {
+        if (isOpen) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'unset';
+        }
+        return () => {
+            document.body.style.overflow = 'unset';
+        };
+    }, [isOpen]);
+
     const cartCount = cart.reduce((total, item) => total + item.quantity, 0);
 
     return (
@@ -121,32 +133,54 @@ export function Navbar() {
                     </div>
                 </div>
 
-                {/* Mobile Menu */}
-                {isOpen && (
-                    <div className="md:hidden border-t border-border">
-                        <div className="space-y-1 px-4 py-4 bg-background">
-                            {links.map((link) => (
-                                <Link
-                                    key={link.href}
-                                    href={link.href}
-                                    className="block py-2 text-base font-medium text-foreground/80 hover:text-primary"
-                                    onClick={() => setIsOpen(false)}
-                                >
-                                    {link.label}
-                                </Link>
-                            ))}
-                            {!user && (
+                {/* Mobile Menu (Slide-in) */}
+                <div className={cn(
+                    "fixed inset-0 z-[100] bg-background transform transition-transform duration-300 ease-in-out md:hidden flex flex-col",
+                    isOpen ? "translate-x-0" : "-translate-x-full"
+                )}>
+                    {/* Header */}
+                    <div className="h-24 flex items-center justify-between px-6 border-b border-border/40">
+                        <span className="font-serif text-2xl font-medium tracking-wide">Menu</span>
+                        <Button variant="ghost" size="icon" onClick={() => setIsOpen(false)}>
+                            <X className="h-6 w-6" />
+                        </Button>
+                    </div>
+
+                    {/* Links */}
+                    <nav className="flex-1 flex flex-col p-8 space-y-6 overflow-y-auto">
+                        {links.map((link) => (
+                            <Link
+                                key={link.href}
+                                href={link.href}
+                                className="text-3xl font-serif font-medium text-foreground hover:text-primary transition-colors block"
+                                onClick={() => setIsOpen(false)}
+                            >
+                                {link.label}
+                            </Link>
+                        ))}
+                        <div className="pt-8 border-t border-border/40 mt-4 space-y-4">
+                            {!user ? (
                                 <Link
                                     href="/login"
-                                    className="block py-2 text-base font-medium text-foreground/80 hover:text-primary"
                                     onClick={() => setIsOpen(false)}
+                                    className="text-lg font-medium text-muted-foreground hover:text-primary flex items-center gap-2"
                                 >
-                                    Login / Signup
+                                    <UserIcon className="w-5 h-5" /> Login / Sign Up
                                 </Link>
+                            ) : (
+                                <button
+                                    onClick={() => {
+                                        logout();
+                                        setIsOpen(false);
+                                    }}
+                                    className="text-lg font-medium text-muted-foreground hover:text-red-500 flex items-center gap-2"
+                                >
+                                    <UserIcon className="w-5 h-5" /> Logout
+                                </button>
                             )}
                         </div>
-                    </div>
-                )}
+                    </nav>
+                </div>
             </header>
 
             <CartSheet isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
