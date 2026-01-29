@@ -6,6 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { LayoutDashboard, Package, LogOut, Images, ShoppingBag, MessageSquareQuote } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useStore } from "@/lib/store";
+import LowStockAlert from "@/components/admin/LowStockAlert";
 
 export default function AdminLayout({
     children,
@@ -98,6 +99,7 @@ export default function AdminLayout({
 
             {/* Main Content */}
             <main className="flex-1 overflow-auto">
+                <LowStockAlert />
                 {children}
             </main>
         </div>

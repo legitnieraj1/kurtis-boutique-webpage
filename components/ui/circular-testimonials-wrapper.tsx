@@ -17,11 +17,11 @@ export function CircularTestimonialsWrapper() {
     // Brand Colors
     const colors = {
         name: "#801848", // Deep Wine
-        designation: "#B05480", // Rose Mauve
-        testimony: "#2D2D2D", // Soft Charcoal
         arrowBackground: "#801848", // Deep Wine
         arrowForeground: "#FDFBF7", // Ivory
         arrowHoverBackground: "#B05480", // Rose Mauve
+        starFilled: "#801848", // Deep Wine
+        starEmpty: "#E5E7EB", // Soft Gray (Tailwind gray-200)
     };
 
     return (
@@ -30,8 +30,6 @@ export function CircularTestimonialsWrapper() {
             colors={colors}
             fontSizes={{
                 name: "1.75rem",
-                designation: "1rem",
-                quote: "1.25rem"
             }}
         />
     );

@@ -60,7 +60,7 @@ export function BannerRow({ banner, index, total, onEdit }: BannerRowProps) {
                             : "bg-stone-100 text-stone-500 border-stone-200"
                     )}
                 >
-                    {banner.isActive ? "In Stock" : "Inactive"} {/* Using "In Stock" phrasing to match ref if desired, but "Active" is better for banners. Sticking to Active for logic, but style matches. */}
+                    {banner.isActive ? "Active" : "Inactive"}
                 </span>
             </div>
 

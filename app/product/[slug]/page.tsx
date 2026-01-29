@@ -1,10 +1,11 @@
 "use client";
 
-import { useState, use, useEffect } from "react";
+import { useState, use, useEffect, useRef } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
+import { AnimatePresence, motion } from "framer-motion";
 import { formatPrice, cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Heart, Minus, Plus, Share2, Truck, ShieldCheck, RefreshCw } from "lucide-react";
@@ -26,6 +27,28 @@ export default function ProductPage({ params }: { params: Promise<{ slug: string
     const [selectedSize, setSelectedSize] = useState<string | null>(null);
     const [quantity, setQuantity] = useState(1);
     const [activeImage, setActiveImage] = useState<string>("");
+    const [showSticky, setShowSticky] = useState(false);
+    const actionsRef = useRef<HTMLDivElement>(null);
+
+    // Scroll Observer to toggle sticky bar
+    useEffect(() => {
+        if (!hydrated) return;
+
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                // If actions are visible -> Hide Sticky
+                // If actions are NOT visible -> Show Sticky
+                setShowSticky(!entry.isIntersecting);
+            },
+            { threshold: 0.1 }
+        );
+
+        if (actionsRef.current) {
+            observer.observe(actionsRef.current);
+        }
+
+        return () => observer.disconnect();
+    }, [hydrated]);
 
     useEffect(() => {
         useProductStore.persist.rehydrate();
@@ -80,13 +103,13 @@ export default function ProductPage({ params }: { params: Promise<{ slug: string
         <div className="min-h-screen bg-background/60 backdrop-blur-sm">
             <Navbar />
 
-            <main className="container mx-auto px-4 py-8 md:py-12">
+            <main className="container mx-auto px-4 py-8 md:py-12 pb-24 md:pb-12">
                 <div className="flex flex-col md:flex-row gap-12 lg:gap-16">
 
                     {/* IMAGE GALLERY */}
                     <div className="w-full md:w-1/2 space-y-4">
                         {/* Main Image */}
-                        <div className="relative aspect-[3/4] bg-secondary/20 rounded-lg overflow-hidden group">
+                        <div className="relative aspect-[4/5] md:aspect-[3/4] bg-secondary/20 rounded-lg overflow-hidden group">
                             {activeImage ? (
                                 <img
                                     src={activeImage}
@@ -122,13 +145,52 @@ export default function ProductPage({ params }: { params: Promise<{ slug: string
                         </div>
                     </div>
 
+                    {/* MOVED: Mobile Sticky CTA (Now sits in flow after images on mobile) */}
+                    <div className="md:hidden sticky bottom-4 z-40 px-1 pointer-events-none">
+                        <AnimatePresence>
+                            {showSticky && (
+                                <motion.div
+                                    initial={{ y: 20, opacity: 0 }}
+                                    animate={{ y: 0, opacity: 1 }}
+                                    exit={{ y: 20, opacity: 0 }}
+                                    transition={{ duration: 0.2, ease: "easeInOut" }}
+                                    className="pointer-events-auto"
+                                >
+                                    <div className="flex items-center gap-3 p-3 pl-4 rounded-xl bg-white/80 backdrop-blur-xl border border-white/40 shadow-xl ring-1 ring-black/5">
+                                        <div className="flex flex-col min-w-0 flex-1">
+                                            <span className="text-xs font-medium text-muted-foreground truncate">{product.name}</span>
+                                            <div className="flex items-center gap-1.5">
+                                                <span className="font-bold text-base text-foreground">{formatPrice(product.discountPrice || product.price)}</span>
+                                                {selectedSize && <span className="text-xs px-1.5 py-0.5 rounded bg-muted text-foreground font-medium">{selectedSize}</span>}
+                                            </div>
+                                        </div>
+                                        <Button
+                                            className="shadow-md font-semibold h-10 px-5 rounded-lg bg-primary hover:bg-primary/90 text-white text-sm"
+                                            onClick={() => {
+                                                if (!selectedSize) {
+                                                    document.getElementById('size-selector')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                                    toast.info("Please select a size first");
+                                                } else {
+                                                    handleAddToCart();
+                                                }
+                                            }}
+                                            disabled={!product.inStock}
+                                        >
+                                            {product.inStock ? (selectedSize ? "Add" : "Select") : "No Stock"}
+                                        </Button>
+                                    </div>
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
+                    </div>
+
                     {/* PRODUCT INFO */}
-                    <div className="w-full md:w-1/2 space-y-8">
+                    <div className="w-full md:w-1/2 space-y-5 md:space-y-8">
                         <div>
-                            <nav className="text-sm text-muted-foreground mb-4">
+                            <nav className="text-sm text-muted-foreground mb-2 md:mb-4">
                                 <Link href="/">Home</Link> / <Link href="/shop">Shop</Link> / <span className="text-foreground capitalize">{product.name}</span>
                             </nav>
-                            <h1 className="text-3xl md:text-4xl font-serif font-medium text-foreground tracking-tight">{product.name}</h1>
+                            <h1 className="text-2xl md:text-4xl font-serif font-medium text-foreground tracking-tight">{product.name}</h1>
 
                             <div className="mt-4 flex items-center gap-4">
                                 {product.discountPrice ? (
@@ -148,7 +210,7 @@ export default function ProductPage({ params }: { params: Promise<{ slug: string
                         </div>
 
                         {/* Sizes */}
-                        <div>
+                        <div id="size-selector">
                             <div className="flex justify-between items-center mb-2">
                                 <span className="font-medium text-sm">Select Size</span>
                                 <button className="text-xs underline text-muted-foreground hover:text-primary">Size Chart</button>
@@ -175,7 +237,7 @@ export default function ProductPage({ params }: { params: Promise<{ slug: string
                         </div>
 
                         {/* Actions */}
-                        <div className="flex flex-col sm:flex-row gap-4 pt-4 border-t border-border">
+                        <div ref={actionsRef} className="flex flex-col sm:flex-row gap-4 pt-4 border-t border-border">
                             <div className="flex items-center border border-input rounded-md w-max">
                                 <button
                                     className="px-3 py-2 hover:bg-muted"
@@ -194,7 +256,7 @@ export default function ProductPage({ params }: { params: Promise<{ slug: string
 
                             <Button
                                 size="lg"
-                                className="flex-1 rounded-md"
+                                className="flex-1 rounded-md h-12 md:h-12 lg:h-12 md:rounded-md max-md:h-14 max-md:rounded-xl max-md:font-bold max-md:text-lg"
                                 onClick={handleAddToCart}
                                 disabled={!product.inStock}
                             >
@@ -230,13 +292,18 @@ export default function ProductPage({ params }: { params: Promise<{ slug: string
                                 <span className="text-xs text-muted-foreground">360 degree opening video must for any issue</span>
                             </div>
                         </div>
+
+                        {/* Customisation Form */}
+                        <CustomisationForm productId={product.id} productName={product.name} />
                     </div>
                 </div>
 
                 {/* Customisation Form */}
-                <CustomisationForm productId={product.id} productName={product.name} />
+
 
             </main>
+
+
 
             <Footer />
         </div>

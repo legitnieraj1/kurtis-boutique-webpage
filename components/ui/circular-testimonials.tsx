@@ -6,28 +6,31 @@ import React, {
     useMemo,
     useCallback,
 } from "react";
-import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
+import { FaArrowLeft, FaArrowRight, FaStar } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 
 export interface Testimonial {
-    quote: string;
+    id: number;
+    image: string;
     name: string;
-    designation: string;
-    src: string;
+    rating: number;
+    verified: boolean;
+    createdAt: string;
 }
+
 interface Colors {
     name?: string;
-    designation?: string;
-    testimony?: string;
+    starFilled?: string;
+    starEmpty?: string;
     arrowBackground?: string;
     arrowForeground?: string;
     arrowHoverBackground?: string;
 }
+
 interface FontSizes {
     name?: string;
-    designation?: string;
-    quote?: string;
 }
+
 interface CircularTestimonialsProps {
     testimonials: Testimonial[];
     autoplay?: boolean;
@@ -54,14 +57,13 @@ export const CircularTestimonials = ({
 }: CircularTestimonialsProps) => {
     // Color & font config
     const colorName = colors.name ?? "#000";
-    const colorDesignation = colors.designation ?? "#6b7280";
-    const colorTestimony = colors.testimony ?? "#4b5563";
+    const colorStarFilled = colors.starFilled ?? "#801848"; // Brand wine/plum
+    const colorStarEmpty = colors.starEmpty ?? "#D1D5DB"; // Soft muted gray
+
     const colorArrowBg = colors.arrowBackground ?? "#141414";
     const colorArrowFg = colors.arrowForeground ?? "#f1f1f7";
     const colorArrowHoverBg = colors.arrowHoverBackground ?? "#00a6fb";
     const fontSizeName = fontSizes.name ?? "1.5rem";
-    const fontSizeDesignation = fontSizes.designation ?? "0.925rem";
-    const fontSizeQuote = fontSizes.quote ?? "1.125rem";
 
     // State
     const [activeIndex, setActiveIndex] = useState(0);
@@ -92,7 +94,7 @@ export const CircularTestimonials = ({
 
     // Autoplay
     useEffect(() => {
-        if (autoplay) {
+        if (autoplay && testimonialsLength > 0) {
             autoplayIntervalRef.current = setInterval(() => {
                 setActiveIndex((prev) => (prev + 1) % testimonialsLength);
             }, 5000);
@@ -115,23 +117,28 @@ export const CircularTestimonials = ({
 
     // Navigation handlers
     const handleNext = useCallback(() => {
+        if (testimonialsLength === 0) return;
         setActiveIndex((prev) => (prev + 1) % testimonialsLength);
         if (autoplayIntervalRef.current) clearInterval(autoplayIntervalRef.current);
     }, [testimonialsLength]);
+
     const handlePrev = useCallback(() => {
+        if (testimonialsLength === 0) return;
         setActiveIndex((prev) => (prev - 1 + testimonialsLength) % testimonialsLength);
         if (autoplayIntervalRef.current) clearInterval(autoplayIntervalRef.current);
     }, [testimonialsLength]);
 
     // Compute transforms for each image (always show 3: left, center, right)
     function getImageStyle(index: number): React.CSSProperties {
+        if (testimonialsLength === 0) return {};
+
         const gap = calculateGap(containerWidth);
         const maxStickUp = gap * 0.8;
         const offset = (index - activeIndex + testimonialsLength) % testimonialsLength;
-        // const zIndex = testimonialsLength - Math.abs(offset);
         const isActive = index === activeIndex;
         const isLeft = (activeIndex - 1 + testimonialsLength) % testimonialsLength === index;
         const isRight = (activeIndex + 1) % testimonialsLength === index;
+
         if (isActive) {
             return {
                 zIndex: 3,
@@ -168,12 +175,14 @@ export const CircularTestimonials = ({
         };
     }
 
-    // Framer Motion variants for quote
-    const quoteVariants = {
-        initial: { opacity: 0, y: 20 },
-        animate: { opacity: 1, y: 0 },
-        exit: { opacity: 0, y: -20 },
+    // Framer Motion variants for content
+    const contentVariants = {
+        initial: { opacity: 0, scale: 0.95 },
+        animate: { opacity: 1, scale: 1 },
+        exit: { opacity: 0, scale: 0.95 },
     };
+
+    if (testimonialsLength === 0) return null;
 
     return (
         <div className="testimonial-container">
@@ -181,10 +190,10 @@ export const CircularTestimonials = ({
                 {/* Images */}
                 <div className="image-container" ref={imageContainerRef}>
                     {testimonials.map((testimonial, index) => (
-                        testimonial.src ? (
+                        testimonial.image ? (
                             <img
-                                key={index}
-                                src={testimonial.src}
+                                key={testimonial.id || index}
+                                src={testimonial.image}
                                 alt={testimonial.name}
                                 className="testimonial-image"
                                 data-index={index}
@@ -192,7 +201,7 @@ export const CircularTestimonials = ({
                             />
                         ) : (
                             <div
-                                key={index}
+                                key={testimonial.id || index}
                                 className="testimonial-image bg-stone-100 flex items-center justify-center text-stone-300"
                                 data-index={index}
                                 style={getImageStyle(index)}
@@ -207,54 +216,44 @@ export const CircularTestimonials = ({
                     <AnimatePresence mode="wait">
                         <motion.div
                             key={activeIndex}
-                            variants={quoteVariants}
+                            variants={contentVariants}
                             initial="initial"
                             animate="animate"
                             exit="exit"
-                            transition={{ duration: 0.3, ease: "easeInOut" }}
+                            transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1.0] }}
+                            className="flex flex-col gap-4"
                         >
+                            {/* Name */}
                             <h3
-                                className="name"
+                                className="name font-serif"
                                 style={{ color: colorName, fontSize: fontSizeName }}
                             >
                                 {activeTestimonial.name}
                             </h3>
-                            <p
-                                className="designation"
-                                style={{ color: colorDesignation, fontSize: fontSizeDesignation }}
-                            >
-                                {activeTestimonial.designation}
-                            </p>
-                            <motion.p
-                                className="quote"
-                                style={{ color: colorTestimony, fontSize: fontSizeQuote }}
-                            >
-                                {activeTestimonial.quote.split(" ").map((word, i) => (
-                                    <motion.span
-                                        key={i}
-                                        initial={{
-                                            filter: "blur(10px)",
-                                            opacity: 0,
-                                            y: 5,
-                                        }}
-                                        animate={{
-                                            filter: "blur(0px)",
-                                            opacity: 1,
-                                            y: 0,
-                                        }}
+
+                            {/* Stars */}
+                            <div className="flex gap-1.5">
+                                {[1, 2, 3, 4, 5].map((star) => (
+                                    <motion.div
+                                        key={star}
+                                        initial={{ opacity: 0, scale: 0.8 }}
+                                        animate={{ opacity: 1, scale: 1 }}
                                         transition={{
-                                            duration: 0.22,
-                                            ease: "easeInOut",
-                                            delay: 0.025 * i,
+                                            duration: 0.4,
+                                            delay: star * 0.05,
+                                            ease: "easeOut"
                                         }}
-                                        style={{ display: "inline-block" }}
                                     >
-                                        {word}&nbsp;
-                                    </motion.span>
+                                        <FaStar
+                                            size={24}
+                                            color={star <= activeTestimonial.rating ? colorStarFilled : colorStarEmpty}
+                                        />
+                                    </motion.div>
                                 ))}
-                            </motion.p>
+                            </div>
                         </motion.div>
                     </AnimatePresence>
+
                     <div className="arrow-buttons">
                         <button
                             className="arrow-button prev-button"
@@ -266,7 +265,7 @@ export const CircularTestimonials = ({
                             onMouseLeave={() => setHoverPrev(false)}
                             aria-label="Previous testimonial"
                         >
-                            <FaArrowLeft size={28} color={colorArrowFg} />
+                            <FaArrowLeft size={22} color={colorArrowFg} />
                         </button>
                         <button
                             className="arrow-button next-button"
@@ -278,7 +277,7 @@ export const CircularTestimonials = ({
                             onMouseLeave={() => setHoverNext(false)}
                             aria-label="Next testimonial"
                         >
-                            <FaArrowRight size={28} color={colorArrowFg} />
+                            <FaArrowRight size={22} color={colorArrowFg} />
                         </button>
                     </div>
                 </div>
@@ -291,7 +290,8 @@ export const CircularTestimonials = ({
         }
         .testimonial-grid {
           display: grid;
-          gap: 5rem;
+          gap: 4rem;
+          align-items: center;
         }
         .image-container {
           position: relative;
@@ -310,17 +310,11 @@ export const CircularTestimonials = ({
         .testimonial-content {
           display: flex;
           flex-direction: column;
-          justify-content: space-between;
+          justify-content: center;
         }
         .name {
           font-weight: bold;
-          margin-bottom: 0.25rem;
-        }
-        .designation {
-          margin-bottom: 2rem;
-        }
-        .quote {
-          line-height: 1.75;
+          margin: 0;
         }
         .arrow-buttons {
           display: flex;
@@ -328,8 +322,8 @@ export const CircularTestimonials = ({
           padding-top: 3rem;
         }
         .arrow-button {
-          width: 2.7rem;
-          height: 2.7rem;
+          width: 3.5rem;
+          height: 3.5rem;
           border-radius: 50%;
           display: flex;
           align-items: center;
@@ -338,15 +332,12 @@ export const CircularTestimonials = ({
           transition: background-color 0.3s;
           border: none;
         }
-        .word {
-          display: inline-block;
-        }
         @media (min-width: 768px) {
           .testimonial-grid {
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1fr 0.8fr;
           }
           .arrow-buttons {
-            padding-top: 0;
+            padding-top: 2.5rem;
           }
         }
       `}</style>

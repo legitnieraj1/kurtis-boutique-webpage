@@ -3,6 +3,7 @@
 import { useStore } from "@/lib/store";
 import { Button } from "@/components/ui/button";
 import { Trash, MessageSquare, Mail, Phone, Clock, CheckCircle, XCircle } from "lucide-react";
+import { toast } from "sonner";
 
 export default function CustomisationQueriesPage() {
     const { customisationQueries, deleteCustomisationQuery, updateCustomisationStatus } = useStore();
@@ -18,6 +19,12 @@ export default function CustomisationQueriesPage() {
             </div>
         );
     }
+
+    const handleCopy = (text: string) => {
+        if (!text) return;
+        navigator.clipboard.writeText(text);
+        toast.success("Copied to clipboard");
+    };
 
     return (
         <div className="p-8 space-y-6">
@@ -64,7 +71,7 @@ export default function CustomisationQueriesPage() {
                                     <span className="block font-medium text-xs uppercase tracking-wide text-muted-foreground mb-1">Customer</span>
                                     <div className="space-y-1">
                                         <p>{query.userEmail}</p>
-                                        <div className="flex items-center gap-2">
+                                        <div className="flex flex-wrap items-center gap-2">
                                             <span className="badge badge-outline text-xs border px-1.5 py-0.5 rounded-sm">
                                                 Prefers: {query.contactPreference}
                                             </span>
@@ -73,6 +80,21 @@ export default function CustomisationQueriesPage() {
                                                     Size: {query.preferredSize}
                                                 </span>
                                             )}
+                                        </div>
+                                        {/* Mobile Number Row */}
+                                        <div className="flex items-center gap-2 mt-1">
+                                            <div className="border bg-background px-2 py-0.5 rounded-sm text-xs font-mono min-w-[120px]">
+                                                {query.mobileNumber || "—"}
+                                            </div>
+                                            <Button
+                                                variant="outline"
+                                                size="sm"
+                                                className="h-6 text-[10px] px-2"
+                                                disabled={!query.mobileNumber}
+                                                onClick={() => query.mobileNumber && handleCopy(query.mobileNumber)}
+                                            >
+                                                Copy
+                                            </Button>
                                         </div>
                                     </div>
                                 </div>

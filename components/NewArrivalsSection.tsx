@@ -70,19 +70,19 @@ export function NewArrivalsSection() {
                 </div>
 
                 {/* Filter Tabs */}
-                <div className="flex flex-wrap justify-center gap-4 mb-12 border-b border-border/50 pb-1">
+                <div className="grid grid-cols-2 md:flex md:flex-wrap justify-center gap-y-6 gap-x-4 md:gap-4 mb-12 border-b border-border/50 pb-1">
                     {TABS.map((tab) => (
                         <button
                             key={tab.id}
                             onClick={() => setActiveTab(tab.id)}
                             className={cn(
-                                "relative pb-3 px-2 text-sm md:text-base font-medium transition-colors duration-300",
+                                "relative pb-3 px-2 text-sm md:text-base font-medium transition-colors duration-300 flex justify-center",
                                 activeTab === tab.id
                                     ? "text-primary"
                                     : "text-muted-foreground hover:text-foreground"
                             )}
                         >
-                            {tab.label}
+                            <span className="text-center">{tab.label}</span>
                             {activeTab === tab.id && (
                                 <motion.div
                                     layoutId="activeTab"

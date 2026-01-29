@@ -64,11 +64,6 @@ export const BackgroundGradientAnimation = ({
             "--gradient-background-end",
             gradientBackgroundEnd
         );
-        // Adjusted colors for the boutique aesthetic (Gold/Rose/Beige instead of harsh purples)
-        // Overriding props if not passed, or standardizing
-        // Actually, sticking to prompts logic but maybe softening defaults? 
-        // The user passed defaults in the component definition. I will respect them but local overrides might look better.
-        // I'll stick to what was provided in the snippet to ensure it works as requested.
         document.body.style.setProperty("--first-color", firstColor);
         document.body.style.setProperty("--second-color", secondColor);
         document.body.style.setProperty("--third-color", thirdColor);

@@ -6,10 +6,11 @@ import { formatPrice } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Plus, Edit, Trash, EyeOff } from "lucide-react";
 import { useProductStore } from "@/lib/store";
+import ProductForm from "@/components/admin/ProductForm";
 
 export default function AdminProducts() {
     // 1. Get state and actions from the store
-    const { products, categories, addProduct, deleteProduct, toggleStock: toggleStockStore, addCategory } = useProductStore();
+    const { products, addProduct, deleteProduct, toggleStock: toggleStockStore, updateProduct } = useProductStore();
     const [hydrated, setHydrated] = useState(false);
 
     // 2. Handle hydration
@@ -19,88 +20,28 @@ export default function AdminProducts() {
     }, []);
 
     const [isAdding, setIsAdding] = useState(false);
-    const [newProduct, setNewProduct] = useState<Partial<Product>>({
-        name: '',
-        category: 'kurtis',
-        price: 0,
-        inStock: true,
-        images: [],
-        description: ''
-    });
+    const [editingProduct, setEditingProduct] = useState<Product | null>(null);
 
-    const [isAddingCategory, setIsAddingCategory] = useState(false);
-    const [newCategoryName, setNewCategoryName] = useState("");
-
-    const handleAddCategory = () => {
-        if (!newCategoryName.trim()) return;
-
-        const safeId = newCategoryName.toLowerCase().trim().replace(/[^a-z0-9]/g, '-');
-
-        // Check duplicates
-        if (categories.some(c => c.id === safeId || c.name.toLowerCase() === newCategoryName.trim().toLowerCase())) {
-            alert("Category already exists!");
-            return;
-        }
-
-        const newCat = {
-            id: safeId,
-            name: newCategoryName.trim(),
-            image: "" // Default placeholder
-        };
-
-        addCategory(newCat);
-
-        // Select the new category
-        setNewProduct(prev => ({ ...prev, category: safeId }));
-        setNewCategoryName("");
-        setIsAddingCategory(false);
-    };
-    // --- CATEGORY LOGIC END ---
-
-    // 3. Handle File Upload -> Convert to Base64 (Multiple Images)
-    const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files && e.target.files.length > 0) {
-            const files = Array.from(e.target.files);
-
-            files.forEach(file => {
-                const reader = new FileReader();
-                reader.onloadend = () => {
-                    const base64String = reader.result as string;
-                    setNewProduct(prev => ({
-                        ...prev,
-                        images: [...(prev.images || []), base64String]
-                    }));
-                };
-                reader.readAsDataURL(file);
-            });
+    const handleSave = (data: Product) => {
+        if (editingProduct) {
+            updateProduct(data);
+            setEditingProduct(null);
+        } else {
+            addProduct(data);
+            setIsAdding(false);
         }
     };
 
-    const removeImage = (indexToRemove: number) => {
-        setNewProduct(prev => ({
-            ...prev,
-            images: prev.images?.filter((_, index) => index !== indexToRemove)
-        }));
-    };
-
-    // 4. Submit New Product
-    const handleAddProductSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        const product: Product = {
-            id: Date.now().toString(),
-            slug: newProduct.name?.toLowerCase().replace(/\s+/g, '-') || 'product',
-            name: newProduct.name || 'New Product',
-            price: Number(newProduct.price) || 0,
-            category: newProduct.category || 'kurtis',
-            inStock: true,
-            images: newProduct.images?.length ? newProduct.images : ['/placeholder.jpg'],
-            description: newProduct.description || 'No description',
-            sizes: ['S', 'M', 'L']
-        };
-
-        addProduct(product);
+    const handleEdit = (product: Product) => {
+        setEditingProduct(product);
         setIsAdding(false);
-        setNewProduct({ name: '', category: 'kurtis', price: 0, inStock: true, images: [], description: '' });
+        // Scroll to top to see form
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    const handleCancel = () => {
+        setIsAdding(false);
+        setEditingProduct(null);
     };
 
     const handleDelete = (id: string) => {
@@ -121,122 +62,23 @@ export default function AdminProducts() {
         <div className="p-8 space-y-6">
             <div className="flex justify-between items-center">
                 <h1 className="text-3xl font-serif font-bold">Products</h1>
-                <Button onClick={() => setIsAdding(!isAdding)}>
-                    {isAdding ? 'Cancel' : (
-                        <><Plus className="w-4 h-4 mr-2" /> Add Product</>
-                    )}
-                </Button>
+                {!isAdding && !editingProduct && (
+                    <Button onClick={() => setIsAdding(true)}>
+                        <Plus className="w-4 h-4 mr-2" /> Add Product
+                    </Button>
+                )}
             </div>
 
-            {isAdding && (
-                <div className="bg-background p-6 rounded-lg border border-border shadow-sm mb-8 animate-in slide-in-from-top-4">
-                    <h2 className="text-xl font-medium mb-4">Add New Product</h2>
-                    <form onSubmit={handleAddProductSubmit} className="space-y-4">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div className="space-y-2">
-                                <label className="text-sm font-medium">Product Name</label>
-                                <input
-                                    type="text"
-                                    required
-                                    className="w-full px-3 py-2 border rounded-md"
-                                    value={newProduct.name}
-                                    onChange={e => setNewProduct({ ...newProduct, name: e.target.value })}
-                                />
-                            </div>
-
-                            <div className="space-y-2">
-                                <label className="text-sm font-medium">Category</label>
-                                {!isAddingCategory ? (
-                                    <div className="flex gap-2">
-                                        <select
-                                            className="w-full px-3 py-2 border rounded-md bg-background"
-                                            value={newProduct.category}
-                                            onChange={e => {
-                                                if (e.target.value === "__NEW__") {
-                                                    setIsAddingCategory(true);
-                                                } else {
-                                                    setNewProduct({ ...newProduct, category: e.target.value });
-                                                }
-                                            }}
-                                        >
-                                            <option value="" disabled>Select Category</option>
-                                            {(categories || []).map(cat => (
-                                                <option key={cat.id} value={cat.id}>{cat.name}</option>
-                                            ))}
-                                            <option value="__NEW__">➕ Add New Category</option>
-                                        </select>
-                                    </div>
-                                ) : (
-                                    <div className="flex gap-2">
-                                        <input
-                                            type="text"
-                                            autoFocus
-                                            placeholder="Enter new category name"
-                                            className="flex-1 px-3 py-2 border rounded-md"
-                                            value={newCategoryName}
-                                            onChange={e => setNewCategoryName(e.target.value)}
-                                            onKeyDown={e => {
-                                                if (e.key === 'Enter') {
-                                                    e.preventDefault();
-                                                    handleAddCategory();
-                                                }
-                                                if (e.key === 'Escape') {
-                                                    setIsAddingCategory(false);
-                                                }
-                                            }}
-                                        />
-                                        <Button type="button" size="sm" onClick={handleAddCategory}>Save</Button>
-                                        <Button type="button" variant="ghost" size="sm" onClick={() => setIsAddingCategory(false)}>Cancel</Button>
-                                    </div>
-                                )}
-                            </div>
-                            <div className="space-y-2">
-                                <label className="text-sm font-medium">Price (₹)</label>
-                                <input
-                                    type="number"
-                                    required
-                                    className="w-full px-3 py-2 border rounded-md"
-                                    value={newProduct.price}
-                                    onChange={e => setNewProduct({ ...newProduct, price: Number(e.target.value) })}
-                                />
-                            </div>
-                            <div className="space-y-2">
-                                <label className="text-sm font-medium">Product Images (Upload Multiple)</label>
-                                <input
-                                    type="file"
-                                    accept="image/*"
-                                    multiple // Enable multiple files
-                                    onChange={handleImageUpload}
-                                    className="w-full px-3 py-2 border rounded-md"
-                                />
-                                {/* Image Preview Grid */}
-                                {newProduct.images && newProduct.images.length > 0 && (
-                                    <div className="mt-4 grid grid-cols-4 gap-4">
-                                        {newProduct.images.map((img, idx) => (
-                                            <div key={idx} className="relative aspect-square rounded-md overflow-hidden border border-border group">
-                                                <img src={img} alt={`preview ${idx}`} className="w-full h-full object-cover" />
-                                                <button
-                                                    type="button"
-                                                    onClick={() => removeImage(idx)}
-                                                    className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
-                                                    title="Remove Image"
-                                                >
-                                                    <Trash className="w-3 h-3" />
-                                                </button>
-                                            </div>
-                                        ))}
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                        <div className="pt-2">
-                            <Button type="submit">Save Product</Button>
-                        </div>
-                    </form>
-                </div>
+            {/* PRODUCT FORM (ADD / EDIT) */}
+            {(isAdding || editingProduct) && (
+                <ProductForm
+                    initialData={editingProduct || undefined}
+                    onSubmit={handleSave}
+                    onCancel={handleCancel}
+                />
             )}
 
-            <div className="bg-background rounded-lg border border-border overflow-hidden">
+            <div className="bg-background rounded-lg border border-border overflow-hidden shadow-sm">
                 <table className="w-full text-sm text-left">
                     <thead className="bg-muted/50 text-muted-foreground font-medium border-b border-border">
                         <tr>
@@ -248,40 +90,66 @@ export default function AdminProducts() {
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-border">
-                        {products.map(product => (
-                            <tr key={product.id} className="hover:bg-muted/10">
-                                <td className="px-6 py-4 font-medium text-foreground flex items-center gap-3">
-                                    {/* Preview Image in Table */}
-                                    <div className="w-10 h-10 rounded bg-muted overflow-hidden relative border border-border">
-                                        {/* Display image if available, else placeholder */}
-                                        {product.images[0] ? (
-                                            <img src={product.images[0]} alt={product.name} className="w-full h-full object-cover" />
-                                        ) : (
-                                            <div className="w-full h-full bg-stone-200" />
-                                        )}
-                                    </div>
-                                    {product.name}
-                                </td>
-                                <td className="px-6 py-4 capitalize">{product.category}</td>
-                                <td className="px-6 py-4">{formatPrice(product.price)}</td>
-                                <td className="px-6 py-4">
-                                    <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${product.inStock ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
-                                        {product.inStock ? 'In Stock' : 'Out of Stock'}
-                                    </span>
-                                </td>
-                                <td className="px-6 py-4 text-right space-x-2">
-                                    <Button variant="ghost" size="icon" onClick={() => toggleStock(product.id)} title="Toggle Stock">
-                                        <EyeOff className="w-4 h-4" />
-                                    </Button>
-                                    <Button variant="ghost" size="icon">
-                                        <Edit className="w-4 h-4" />
-                                    </Button>
-                                    <Button variant="ghost" size="icon" className="text-red-500 hover:text-red-600 hover:bg-red-50" onClick={() => handleDelete(product.id)}>
-                                        <Trash className="w-4 h-4" />
-                                    </Button>
-                                </td>
-                            </tr>
-                        ))}
+                        {products.map(product => {
+                            const isLowStock = product.stockRemaining <= 5 && product.inStock;
+                            return (
+                                <tr key={product.id} className="hover:bg-muted/10">
+                                    <td className="px-6 py-4 font-medium text-foreground flex items-center gap-3">
+                                        {/* Preview Image in Table */}
+                                        <div className="w-10 h-10 rounded bg-muted overflow-hidden relative border border-border shrink-0">
+                                            {/* Display image if available, else placeholder */}
+                                            {product.images[0] ? (
+                                                <img src={product.images[0]} alt={product.name} className="w-full h-full object-cover" />
+                                            ) : (
+                                                <div className="w-full h-full bg-stone-200" />
+                                            )}
+                                        </div>
+                                        <div className="flex flex-col">
+                                            <span>{product.name}</span>
+                                            {product.stockRemaining !== undefined && (
+                                                <span className="text-xs text-muted-foreground">Qty: {product.stockRemaining}</span>
+                                            )}
+                                        </div>
+                                    </td>
+                                    <td className="px-6 py-4 capitalize">{product.category}</td>
+                                    <td className="px-6 py-4">
+                                        <div className="flex flex-col">
+                                            {product.discountPrice && product.discountPrice < product.price ? (
+                                                <>
+                                                    <span className="font-medium">{formatPrice(product.discountPrice)}</span>
+                                                    <span className="text-xs text-muted-foreground line-through">{formatPrice(product.price)}</span>
+                                                </>
+                                            ) : (
+                                                formatPrice(product.price)
+                                            )}
+                                        </div>
+                                    </td>
+                                    <td className="px-6 py-4">
+                                        <div className="flex gap-2">
+                                            <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${product.inStock ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                                                {product.inStock ? 'In Stock' : 'Out of Stock'}
+                                            </span>
+                                            {isLowStock && (
+                                                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-amber-100 text-amber-700 animate-pulse">
+                                                    Low Stock
+                                                </span>
+                                            )}
+                                        </div>
+                                    </td>
+                                    <td className="px-6 py-4 text-right space-x-2">
+                                        <Button variant="ghost" size="icon" onClick={() => toggleStock(product.id)} title="Toggle Stock">
+                                            <EyeOff className="w-4 h-4" />
+                                        </Button>
+                                        <Button variant="ghost" size="icon" onClick={() => handleEdit(product)}>
+                                            <Edit className="w-4 h-4" />
+                                        </Button>
+                                        <Button variant="ghost" size="icon" className="text-red-500 hover:text-red-600 hover:bg-red-50" onClick={() => handleDelete(product.id)}>
+                                            <Trash className="w-4 h-4" />
+                                        </Button>
+                                    </td>
+                                </tr>
+                            )
+                        })}
                     </tbody>
                 </table>
             </div>

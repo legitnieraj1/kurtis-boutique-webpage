@@ -37,36 +37,24 @@ export default function Home() {
         <CategoryBubbles />
 
         {/* HERO SECTION */}
-        <section className="relative w-full h-[80vh] overflow-hidden">
-          <BackgroundGradientAnimation
-            containerClassName="h-full w-full"
-            className="absolute inset-0 flex items-center justify-center"
-            firstColor="128, 24, 72"
-            secondColor="176, 84, 128"
-            thirdColor="212, 140, 168"
-            fourthColor="180, 120, 150"
-            fifthColor="150, 60, 100"
-            pointerColor="176, 84, 128"
-            size="80%"
-          >
-            <div className="flex flex-col items-center gap-8 animate-in fade-in zoom-in duration-1000 p-4 w-full h-full justify-center">
-              {/* Logo */}
-              <img
-                src="/kurtis-logo-large.png"
-                alt="Kurtis Boutique"
-                className="w-48 sm:w-64 md:w-80 h-auto object-contain drop-shadow-2xl mb-4"
-              />
+        <section className="relative w-full pt-10 pb-40 md:pb-64 bg-white flex flex-col items-center justify-center overflow-visible">
+          <div className="flex flex-col items-center gap-8 animate-in fade-in zoom-in duration-1000 p-4 w-full">
+            {/* Logo */}
+            <img
+              src="/kurtis-logo-large.png"
+              alt="Kurtis Boutique"
+              className="w-48 sm:w-64 md:w-80 h-auto object-contain drop-shadow-sm mb-4"
+            />
 
-              {/* Banner Carousel moved here */}
-              <div className="w-full max-w-5xl h-[300px] md:h-[400px] rounded-xl overflow-hidden shadow-2xl z-50">
-                <HeroBannerCarousel />
-              </div>
+            {/* Overlapping Banner */}
+            <div className="absolute -bottom-24 md:-bottom-44 w-[90%] md:w-[80%] max-w-5xl h-[200px] md:h-[350px] rounded-xl overflow-hidden shadow-2xl z-20">
+              <HeroBannerCarousel />
             </div>
-          </BackgroundGradientAnimation>
+          </div>
         </section>
 
         {/* CATEGORY GRID */}
-        <section className="py-20 container mx-auto px-4 md:px-8">
+        <section className="pt-40 md:pt-64 pb-20 container mx-auto px-4 md:px-8">
           <div className="flex justify-between items-end mb-12">
             <h2 className="text-3xl font-serif">Shop by Category</h2>
             <Link href="/shop" className="text-primary hover:underline underline-offset-4 hidden sm:block">View All</Link>

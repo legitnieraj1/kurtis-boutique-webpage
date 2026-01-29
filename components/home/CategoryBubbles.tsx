@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 
 export function CategoryBubbles() {
     return (
-        <div className="w-full border-b border-border/40 bg-background py-6">
+        <div className="w-full border-b border-border/40 bg-gradient-to-b from-white to-transparent py-6">
             <div className="container mx-auto px-4 overflow-x-auto scrollbar-hide">
                 <div className="flex justify-start md:justify-center gap-6 md:gap-10 min-w-max pb-2">
                     {CATEGORIES.map((cat) => (

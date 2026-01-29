@@ -37,6 +37,7 @@ export interface CustomisationRequest {
     message: string;
     preferredSize?: string;
     contactPreference: 'WhatsApp' | 'Email' | 'Call';
+    mobileNumber?: string;
 }
 
 interface StoreState {
@@ -136,9 +137,9 @@ export const useStore = create<StoreState>()(
         }),
         {
             name: 'kurtis-boutique-storage',
-            version: 2, // Bump for migration if needed
+            version: 3, // Bump for migration if needed
             migrate: (persistedState: any, version: number) => {
-                if (version < 2) {
+                if (version < 3) {
                     return {
                         ...persistedState,
                         customisationQueries: [],

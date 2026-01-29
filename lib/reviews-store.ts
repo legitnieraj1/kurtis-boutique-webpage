@@ -1,17 +1,19 @@
 import { create } from 'zustand';
-import { persist, createJSONStorage, StateStorage } from 'zustand/middleware';
+import { persist, createJSONStorage } from 'zustand/middleware';
 
 export type Review = {
     id: number;
     name: string;
-    designation: string;
-    quote: string;
-    src: string;
+    image: string;
+    rating: number; // 1-5
+    verified: boolean;
+    createdAt: string;
+    description?: string; // Internal admin note
 };
 
 interface ReviewsState {
     reviews: Review[];
-    addReview: (review: Omit<Review, 'id'>) => void;
+    addReview: (review: Omit<Review, 'id' | 'createdAt' | 'verified'>) => void;
     deleteReview: (id: number) => void;
     reorderReviews: (startIndex: number, endIndex: number) => void;
 }
@@ -20,23 +22,29 @@ const INITIAL_REVIEWS: Review[] = [
     {
         id: 1,
         name: "Priya Sharma",
-        designation: "Verified Buyer",
-        quote: "The quality of the silk kurti amazed me. It feels so premium and the fit is just perfect!",
-        src: ""
+        image: "https://images.unsplash.com/photo-1633332755192-727a05c4013d?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
+        rating: 5,
+        verified: true,
+        createdAt: new Date().toISOString(),
+        description: "loves the silk kurti"
     },
     {
         id: 2,
         name: "Anjali Gupta",
-        designation: "Regular Customer",
-        quote: "I wore the festive set to my sister's wedding and got so many compliments. Truly elegant.",
-        src: ""
+        image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
+        rating: 5,
+        verified: true,
+        createdAt: new Date().toISOString(),
+        description: "festive set feedback"
     },
     {
         id: 3,
         name: "Sneha Reddy",
-        designation: "Fashion Blogger",
-        quote: "Finally a brand that understands modern ethnic wear. Minimal, classy, and super comfortable.",
-        src: ""
+        image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
+        rating: 4,
+        verified: true,
+        createdAt: new Date().toISOString(),
+        description: "fashion blogger review"
     }
 ];
 
@@ -46,7 +54,15 @@ export const useReviewsStore = create<ReviewsState>()(
             reviews: INITIAL_REVIEWS,
             addReview: (review) =>
                 set((state) => ({
-                    reviews: [...state.reviews, { ...review, id: Date.now() }],
+                    reviews: [
+                        ...state.reviews,
+                        {
+                            ...review,
+                            id: Date.now(),
+                            verified: true,
+                            createdAt: new Date().toISOString()
+                        }
+                    ],
                 })),
             deleteReview: (id) =>
                 set((state) => ({
@@ -62,7 +78,7 @@ export const useReviewsStore = create<ReviewsState>()(
         }),
         {
             name: 'reviews-storage',
-            storage: createJSONStorage(() => localStorage), // Default to localStorage
+            storage: createJSONStorage(() => localStorage),
         }
     )
 );

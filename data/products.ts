@@ -11,6 +11,11 @@ export interface Product {
     category: string;
     isNew?: boolean;
     isBestSeller?: boolean;
+    // New fields
+    stockTotal: number;
+    stockRemaining: number;
+    discountType?: "percentage" | "flat" | null;
+    discountValue?: number;
 }
 
 export const CATEGORIES = [
@@ -41,6 +46,8 @@ export const PRODUCTS: Product[] = [
         inStock: true,
         category: 'kurtis',
         isBestSeller: true,
+        stockTotal: 0,
+        stockRemaining: 0,
     },
     {
         id: '2',
@@ -55,6 +62,8 @@ export const PRODUCTS: Product[] = [
         inStock: true,
         category: 'traditional',
         isNew: true,
+        stockTotal: 0,
+        stockRemaining: 0,
     },
     {
         id: '3',
@@ -68,6 +77,8 @@ export const PRODUCTS: Product[] = [
         sizes: ['S', 'M', 'L'],
         inStock: true,
         category: 'workwear',
+        stockTotal: 0,
+        stockRemaining: 0,
     },
     {
         id: '4',
@@ -82,6 +93,8 @@ export const PRODUCTS: Product[] = [
         sizes: ['S', 'M', 'L', 'XL', 'XXL'],
         inStock: true,
         category: 'maxis',
+        stockTotal: 0,
+        stockRemaining: 0,
     },
     {
         id: '5',
@@ -95,6 +108,8 @@ export const PRODUCTS: Product[] = [
         sizes: ['M', 'L', 'XL'],
         inStock: true,
         category: 'sets',
+        stockTotal: 0,
+        stockRemaining: 0,
     },
     {
         id: '6',
@@ -108,6 +123,8 @@ export const PRODUCTS: Product[] = [
         sizes: ['S', 'M', 'L', 'XL'],
         inStock: true,
         category: 'daily',
+        stockTotal: 0,
+        stockRemaining: 0,
     },
     {
         id: '7',
@@ -122,6 +139,8 @@ export const PRODUCTS: Product[] = [
         sizes: ['S', 'M', 'L'],
         inStock: true,
         category: 'dresses',
+        stockTotal: 0,
+        stockRemaining: 0,
     },
     {
         id: '8',
@@ -135,6 +154,8 @@ export const PRODUCTS: Product[] = [
         sizes: ['M', 'L', 'XL', 'XXL'],
         inStock: true,
         category: 'traditional',
+        stockTotal: 0,
+        stockRemaining: 0,
     },
     {
         id: '9',
@@ -148,6 +169,8 @@ export const PRODUCTS: Product[] = [
         sizes: ['S', 'M', 'L', 'XL'],
         inStock: true,
         category: 'aline',
+        stockTotal: 0,
+        stockRemaining: 0,
     },
     {
         id: '10',
@@ -161,6 +184,8 @@ export const PRODUCTS: Product[] = [
         sizes: ['XS', 'S', 'M', 'L'],
         inStock: true,
         category: 'short',
+        stockTotal: 0,
+        stockRemaining: 0,
     },
     {
         id: '11',
@@ -175,6 +200,8 @@ export const PRODUCTS: Product[] = [
         inStock: true,
         category: 'tot',
         isNew: true,
+        stockTotal: 0,
+        stockRemaining: 0,
     },
     {
         id: '12',
@@ -188,6 +215,8 @@ export const PRODUCTS: Product[] = [
         sizes: ['M', 'L', 'XL'],
         inStock: true,
         category: 'kurtis',
+        stockTotal: 0,
+        stockRemaining: 0,
     },
     {
         id: '13',
@@ -202,6 +231,8 @@ export const PRODUCTS: Product[] = [
         inStock: true,
         category: 'sets',
         isNew: true,
+        stockTotal: 0,
+        stockRemaining: 0,
     },
     {
         id: '14',
@@ -215,6 +246,8 @@ export const PRODUCTS: Product[] = [
         sizes: ['XS', 'S', 'M', 'L', 'XL'],
         inStock: true,
         category: 'daily',
+        stockTotal: 0,
+        stockRemaining: 0,
     },
     {
         id: '15',
@@ -229,6 +262,8 @@ export const PRODUCTS: Product[] = [
         inStock: true,
         category: 'dresses',
         isNew: true,
+        stockTotal: 0,
+        stockRemaining: 0,
     },
     {
         id: '16',
@@ -243,6 +278,8 @@ export const PRODUCTS: Product[] = [
         inStock: true,
         category: 'traditional',
         isNew: true,
+        stockTotal: 0,
+        stockRemaining: 0,
     },
     {
         id: '17',
@@ -256,6 +293,8 @@ export const PRODUCTS: Product[] = [
         sizes: ['S', 'M', 'L'],
         inStock: true,
         category: 'maxis',
+        stockTotal: 0,
+        stockRemaining: 0,
     },
     {
         id: '18',
@@ -269,6 +308,8 @@ export const PRODUCTS: Product[] = [
         sizes: ['S', 'M', 'L', 'XL'],
         inStock: true,
         category: 'aline',
+        stockTotal: 0,
+        stockRemaining: 0,
     },
     {
         id: '19',
@@ -282,6 +323,8 @@ export const PRODUCTS: Product[] = [
         sizes: ['XS', 'S', 'M'],
         inStock: true,
         category: 'short',
+        stockTotal: 0,
+        stockRemaining: 0,
     },
     {
         id: '20',
@@ -295,6 +338,8 @@ export const PRODUCTS: Product[] = [
         sizes: ['S', 'M', 'L'],
         inStock: true,
         category: 'tot',
+        stockTotal: 0,
+        stockRemaining: 0,
     },
     {
         id: '21',
@@ -309,5 +354,7 @@ export const PRODUCTS: Product[] = [
         inStock: true,
         category: 'workwear',
         isNew: true,
+        stockTotal: 0,
+        stockRemaining: 0,
     }
 ];
