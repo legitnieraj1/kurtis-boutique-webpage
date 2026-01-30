@@ -78,7 +78,7 @@ function ShopContent() {
                                         All Products
                                         {!selectedCategory && <Check className="w-4 h-4" />}
                                     </button>
-                                    {categories && categories.map(cat => (
+                                    {categories && categories.filter(cat => products.some(p => p.category === cat.id)).map(cat => (
                                         <button
                                             key={cat.id}
                                             onClick={() => setSelectedCategory(cat.id)}

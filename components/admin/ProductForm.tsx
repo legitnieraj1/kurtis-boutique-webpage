@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { Product } from "@/data/products";
 import { Button } from "@/components/ui/button";
-import { Trash, ArrowRight, ArrowLeft, Upload, Plus, X } from "lucide-react";
+import { Trash, ArrowRight, ArrowLeft, Upload, Plus, X, Check } from "lucide-react";
 import { useProductStore } from "@/lib/store";
 
 interface ProductFormProps {
@@ -21,6 +21,8 @@ export default function ProductForm({ initialData, onSubmit, onCancel }: Product
     const [price, setPrice] = useState<number>(initialData?.price || 0);
     const [description, setDescription] = useState(initialData?.description || "");
     const [images, setImages] = useState<string[]>(initialData?.images || []);
+    const [sizes, setSizes] = useState<string[]>(initialData?.sizes || []);
+    const [sizeCounts, setSizeCounts] = useState<Record<string, number>>(initialData?.sizeCounts || {});
 
     // Stock Logic
     // If creating new, remaining matches total. If editing, they are independent (unless total is updated?)
@@ -107,6 +109,29 @@ export default function ProductForm({ initialData, onSubmit, onCancel }: Product
         setIsAddingCategory(false);
     };
 
+    const handleSizeToggle = (size: string) => {
+        setSizes(prev => {
+            if (prev.includes(size)) {
+                // Remove size and its count
+                const newSizes = prev.filter(s => s !== size);
+                const newCounts = { ...sizeCounts };
+                delete newCounts[size];
+                setSizeCounts(newCounts);
+                return newSizes;
+            } else {
+                return [...prev, size];
+            }
+        });
+    };
+
+    const handleSizeCountChange = (size: string, value: string) => {
+        const count = parseInt(value) || 0;
+        setSizeCounts(prev => ({
+            ...prev,
+            [size]: count
+        }));
+    };
+
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
 
@@ -118,7 +143,7 @@ export default function ProductForm({ initialData, onSubmit, onCancel }: Product
             price,
             discountPrice: finalPrice,
             images: images.length ? images : ['/placeholder.jpg'], // Fallback
-            sizes: initialData?.sizes || ['S', 'M', 'L'], // Default sizes for now
+            sizes: sizes.length ? sizes : [], // Use selected sizes
             inStock: stockRemaining > 0, // Driven by stock count
             category,
             stockTotal,
@@ -126,7 +151,8 @@ export default function ProductForm({ initialData, onSubmit, onCancel }: Product
             discountType,
             discountValue: discountType ? discountValue : undefined,
             isNew: initialData?.isNew,
-            isBestSeller: initialData?.isBestSeller
+            isBestSeller: initialData?.isBestSeller,
+            sizeCounts // Save size specific counts
         };
 
         onSubmit(productData);
@@ -150,7 +176,7 @@ export default function ProductForm({ initialData, onSubmit, onCancel }: Product
                             className="w-full px-3 py-2 border rounded-md bg-background focus:ring-1 focus:ring-primary"
                             value={name}
                             onChange={e => setName(e.target.value)}
-                            placeholder="e.g. Royal Blue Silk Kurti"
+                            placeholder="Enter product name"
                         />
                     </div>
 
@@ -161,7 +187,7 @@ export default function ProductForm({ initialData, onSubmit, onCancel }: Product
                             className="w-full px-3 py-2 border rounded-md bg-background focus:ring-1 focus:ring-primary min-h-[100px]"
                             value={description}
                             onChange={e => setDescription(e.target.value)}
-                            placeholder="e.g. Elegant silk kurti with intricate gold embroidery..."
+                            placeholder="Enter product description"
                         />
                     </div>
 
@@ -189,7 +215,7 @@ export default function ProductForm({ initialData, onSubmit, onCancel }: Product
                                 <input
                                     type="text"
                                     autoFocus
-                                    placeholder="e.g. Festive Collection"
+                                    placeholder="Enter category name"
                                     className="flex-1 px-3 py-2 border rounded-md"
                                     value={newCategoryName}
                                     onChange={e => setNewCategoryName(e.target.value)}
@@ -211,7 +237,7 @@ export default function ProductForm({ initialData, onSubmit, onCancel }: Product
                                 type="number"
                                 min="0"
                                 required
-                                placeholder="e.g. 2999"
+                                placeholder="Enter price"
                                 value={price || ''}
                                 onChange={e => setPrice(Number(e.target.value))}
                             />
@@ -261,9 +287,52 @@ export default function ProductForm({ initialData, onSubmit, onCancel }: Product
                     )}
                 </div>
 
-                {/* 3. Stock Management */}
+                {/* 3. Product Variants (Sizes) */}
                 <div className="p-4 bg-muted/30 rounded-lg space-y-4 border border-border/50">
-                    <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">Inventory</h3>
+                    <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">Product Variants</h3>
+                    <div className="space-y-4">
+                        <label className="text-sm font-medium">Available Sizes</label>
+                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                            {['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL'].map((size) => {
+                                const isSelected = sizes.includes(size);
+                                return (
+                                    <div key={size} className={`
+                                        relative border rounded-lg p-3 transition-all cursor-pointer hover:border-primary/50
+                                        ${isSelected ? 'bg-primary/5 border-primary ring-1 ring-primary/20' : 'bg-background border-border'}
+                                    `}>
+                                        <div className="flex items-center gap-2 mb-2" onClick={() => handleSizeToggle(size)}>
+                                            <div className={`
+                                                w-4 h-4 rounded border flex items-center justify-center transition-colors
+                                                ${isSelected ? 'bg-primary border-primary' : 'border-muted-foreground'}
+                                            `}>
+                                                {isSelected && <Check className="w-3 h-3 text-white" />}
+                                            </div>
+                                            <span className={`font-medium ${isSelected ? 'text-primary' : 'text-foreground'}`}>{size}</span>
+                                        </div>
+
+                                        {isSelected && (
+                                            <div className="animate-in fade-in slide-in-from-top-1">
+                                                <input
+                                                    type="number"
+                                                    min="0"
+                                                    placeholder="Qty (Opt)"
+                                                    className="w-full px-2 py-1 text-xs border rounded bg-white focus:outline-none focus:border-primary"
+                                                    value={sizeCounts[size] || ''}
+                                                    onChange={(e) => handleSizeCountChange(size, e.target.value)}
+                                                    onClick={(e) => e.stopPropagation()}
+                                                />
+                                            </div>
+                                        )}
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    </div>
+                </div>
+
+                {/* 4. Inventory (Global) */}
+                <div className="p-4 bg-muted/30 rounded-lg space-y-4 border border-border/50">
+                    <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">Inventory Strategy</h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="space-y-2">
                             <label className="text-sm font-medium">Total Stock (Initial)</label>
@@ -271,7 +340,7 @@ export default function ProductForm({ initialData, onSubmit, onCancel }: Product
                                 type="number"
                                 min="0"
                                 required
-                                placeholder="e.g. 100"
+                                placeholder="Enter total stock"
                                 value={stockTotal || ''}
                                 onChange={e => setStockTotal(Number(e.target.value))}
                             />
@@ -284,7 +353,7 @@ export default function ProductForm({ initialData, onSubmit, onCancel }: Product
                                 min="0"
                                 max={stockTotal}
                                 required
-                                placeholder="e.g. 95"
+                                placeholder="Enter remaining stock"
                                 value={stockRemaining}
                                 onChange={e => setStockRemaining(Number(e.target.value))}
                             />

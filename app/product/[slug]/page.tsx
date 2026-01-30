@@ -237,7 +237,7 @@ export default function ProductPage({ params }: { params: Promise<{ slug: string
                         </div>
 
                         {/* Actions */}
-                        <div ref={actionsRef} className="flex flex-col sm:flex-row gap-4 pt-4 border-t border-border">
+                        <div ref={actionsRef} className="flex flex-col sm:flex-row sm:items-center gap-4 pt-4 border-t border-border">
                             <div className="flex items-center border border-input rounded-md w-max">
                                 <button
                                     className="px-3 py-2 hover:bg-muted"
@@ -256,7 +256,7 @@ export default function ProductPage({ params }: { params: Promise<{ slug: string
 
                             <Button
                                 size="lg"
-                                className="flex-1 rounded-md h-12 md:h-12 lg:h-12 md:rounded-md max-md:h-14 max-md:rounded-xl max-md:font-bold max-md:text-lg"
+                                className="flex-1 h-16 md:h-20 rounded-full bg-gradient-to-r from-primary via-rose-600 to-primary bg-[length:200%_auto] hover:bg-[position:right_center] transition-all duration-500 shadow-xl shadow-primary/25 hover:shadow-2xl hover:shadow-primary/40 text-xl md:text-2xl font-bold tracking-wider uppercase hover:-translate-y-1"
                                 onClick={handleAddToCart}
                                 disabled={!product.inStock}
                             >
@@ -266,7 +266,7 @@ export default function ProductPage({ params }: { params: Promise<{ slug: string
                             <Button
                                 variant="outline"
                                 size="icon"
-                                className={cn("h-12 w-12 rounded-md", isWishlisted && "text-red-500 border-red-200 bg-red-50")}
+                                className={cn("h-14 w-14 rounded-full border-2", isWishlisted && "text-red-500 border-red-200 bg-red-50")}
                                 onClick={toggleWishlist}
                             >
                                 <Heart className={cn("w-5 h-5", isWishlisted && "fill-current")} />

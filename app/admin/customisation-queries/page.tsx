@@ -27,7 +27,7 @@ export default function CustomisationQueriesPage() {
     };
 
     return (
-        <div className="p-8 space-y-6">
+        <div className="p-4 md:p-8 space-y-6">
             <h1 className="text-3xl font-serif font-bold">Customisation Queries</h1>
 
             <div className="grid grid-cols-1 gap-4">

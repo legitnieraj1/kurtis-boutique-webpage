@@ -151,18 +151,37 @@ export function CartSheet({ isOpen, onClose }: CartSheetProps) {
                                     <p className="text-xs text-muted-foreground text-center">
                                         Shipping and taxes calculated at checkout.
                                     </p>
+                                    <div className="space-y-2">
+                                        <label htmlFor="checkout-email" className="text-sm font-medium">Contact Email</label>
+                                        <input
+                                            id="checkout-email"
+                                            type="email"
+                                            placeholder="Enter your email"
+                                            className="w-full px-3 py-2 border rounded-md bg-background"
+                                        />
+                                    </div>
                                     <Button size="lg" className="w-full" onClick={() => {
+                                        // Simple validation check (can be improved)
+                                        const emailInput = document.getElementById('checkout-email') as HTMLInputElement;
+                                        const email = emailInput?.value || "";
+
+                                        if (!email || !email.includes('@')) {
+                                            alert("Please enter a valid email address to checkout.");
+                                            return;
+                                        }
+
                                         const newOrder = {
                                             id: `ORD-${Date.now().toString().slice(-6)}`,
                                             date: new Date().toISOString(),
                                             total: subtotal,
                                             status: 'pending' as const,
                                             items: cartItems,
+                                            email: email
                                         };
                                         useStore.getState().addOrder(newOrder);
                                         useStore.getState().clearCart();
                                         onClose();
-                                        alert("Order placed successfully! (Simulated)");
+                                        alert(`Order placed successfully! Receipt sent to ${email}`);
                                     }}>
                                         Checkout
                                     </Button>

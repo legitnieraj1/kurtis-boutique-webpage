@@ -61,6 +61,7 @@ export default function AdminDashboard() {
                             <thead className="text-xs uppercase bg-muted/50">
                                 <tr>
                                     <th className="px-6 py-3">Order ID</th>
+                                    <th className="px-6 py-3">Customer</th>
                                     <th className="px-6 py-3">Date</th>
                                     <th className="px-6 py-3">Status</th>
                                     <th className="px-6 py-3">Total</th>
@@ -70,6 +71,7 @@ export default function AdminDashboard() {
                                 {safeOrders.slice(0, 10).map((order, idx) => (
                                     <tr key={order.id || `order-${idx}`} className="bg-background border-b hover:bg-muted/10">
                                         <td className="px-6 py-4 font-medium">{order.id || 'N/A'}</td>
+                                        <td className="px-6 py-4 text-muted-foreground">{order.email || 'Guest'}</td>
                                         <td className="px-6 py-4">{formatDate(order.date)}</td>
                                         <td className="px-6 py-4">
                                             <span className={`px-2 py-1 rounded-full text-xs ${order.status === 'completed' ? 'bg-green-100 text-green-800' :

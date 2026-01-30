@@ -66,7 +66,7 @@ export function SearchSheet({ isOpen, onClose }: SearchSheetProps) {
                                     ref={inputRef}
                                     value={query}
                                     onChange={(e) => setQuery(e.target.value)}
-                                    placeholder="Search for kurtis, sets, colors..."
+                                    placeholder="Enter search term"
                                     className="h-14 pl-12 pr-12 text-lg bg-secondary/20 border-transparent focus-visible:ring-1 focus-visible:ring-primary/20 rounded-lg"
                                 />
                                 <Button

@@ -68,17 +68,17 @@ export default function ContactPage() {
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="space-y-2">
                                     <label className="text-sm font-medium">First Name</label>
-                                    <input type="text" className="w-full px-3 py-2 border rounded-md" placeholder="Jane" />
+                                    <input type="text" className="w-full px-3 py-2 border rounded-md" placeholder="Enter your first name" />
                                 </div>
                                 <div className="space-y-2">
                                     <label className="text-sm font-medium">Last Name</label>
-                                    <input type="text" className="w-full px-3 py-2 border rounded-md" placeholder="Doe" />
+                                    <input type="text" className="w-full px-3 py-2 border rounded-md" placeholder="Enter your last name" />
                                 </div>
                             </div>
 
                             <div className="space-y-2">
                                 <label className="text-sm font-medium">Email</label>
-                                <input type="email" className="w-full px-3 py-2 border rounded-md" placeholder="jane@example.com" />
+                                <input type="email" className="w-full px-3 py-2 border rounded-md" placeholder="Enter your email address" />
                             </div>
 
                             <div className="space-y-2">
@@ -93,7 +93,7 @@ export default function ContactPage() {
 
                             <div className="space-y-2">
                                 <label className="text-sm font-medium">Message</label>
-                                <textarea className="w-full px-3 py-2 border rounded-md min-h-[120px]" placeholder="How can we help you?" />
+                                <textarea className="w-full px-3 py-2 border rounded-md min-h-[120px]" placeholder="Enter your message" />
                             </div>
 
                             <Button type="submit" className="w-full">Send Message</Button>

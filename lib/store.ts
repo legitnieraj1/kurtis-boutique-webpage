@@ -21,6 +21,7 @@ export interface Order {
     total: number;
     status: 'pending' | 'processing' | 'completed' | 'cancelled';
     items: CartItem[];
+    email: string;
 }
 
 // --- Customisation Types ---
@@ -182,13 +183,14 @@ export const useProductStore = create<ProductStoreState>()(
         {
             name: 'kurtis-boutique-products',
             skipHydration: true,
-            version: 1,
+            version: 2,
             migrate: (persistedState: any, version: number) => {
-                if (version === 0) {
-                    // Migration from version 0 to 1
+                if (version < 2) {
+                    // Reset products and categories to code defaults on migration
                     return {
                         ...persistedState,
-                        categories: persistedState.categories || CATEGORIES,
+                        products: PRODUCTS,
+                        categories: CATEGORIES,
                     };
                 }
                 return persistedState;

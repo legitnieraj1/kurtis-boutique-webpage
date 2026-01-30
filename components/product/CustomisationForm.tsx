@@ -195,7 +195,7 @@ export function CustomisationForm({ productId, productName }: CustomisationFormP
                                     <input
                                         type="tel"
                                         required
-                                        placeholder="+91 98765 43210"
+                                        placeholder="Enter your mobile number"
                                         className="w-full h-10 rounded-md border border-input bg-background px-3 py-2 text-sm focus:ring-1 focus:ring-primary focus:outline-none"
                                         value={mobileNumber}
                                         onChange={(e) => {
@@ -214,7 +214,7 @@ export function CustomisationForm({ productId, productName }: CustomisationFormP
                                     required
                                     rows={4}
                                     className="w-full min-h-[100px] rounded-md border border-input bg-background px-3 py-2 text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary"
-                                    placeholder="Describe your customisation request in detail..."
+                                    placeholder="Enter customisation details"
                                     value={message}
                                     onChange={(e) => setMessage(e.target.value)}
                                 />

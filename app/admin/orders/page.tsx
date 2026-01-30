@@ -33,59 +33,61 @@ export default function AdminOrdersPage() {
             </div>
 
             <div className="bg-background rounded-lg border border-border overflow-hidden shadow-sm">
-                <table className="w-full text-sm text-left">
-                    <thead className="bg-muted/50 text-muted-foreground font-medium border-b border-border">
-                        <tr>
-                            <th className="px-6 py-3">Order ID</th>
-                            <th className="px-6 py-3">Customer</th>
-                            <th className="px-6 py-3">Date</th>
-                            <th className="px-6 py-3">Status</th>
-                            <th className="px-6 py-3">Total</th>
-                            <th className="px-6 py-3">Shipment</th>
-                            <th className="px-6 py-3 text-right">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody className="divide-y divide-border">
-                        {filteredOrders.map(order => (
-                            <tr key={order.id} className="hover:bg-muted/10 transition-colors">
-                                <td className="px-6 py-4 font-medium text-foreground">
-                                    {order.id}
-                                </td>
-                                <td className="px-6 py-4">
-                                    <div className="font-medium">{order.customer.name}</div>
-                                    <div className="text-xs text-muted-foreground">{order.customer.email}</div>
-                                </td>
-                                <td className="px-6 py-4">{order.date}</td>
-                                <td className="px-6 py-4">
-                                    <OrderStatusBadge status={order.orderStatus} />
-                                </td>
-                                <td className="px-6 py-4 font-medium">
-                                    {formatPrice(order.totalAmount)}
-                                </td>
-                                <td className="px-6 py-4">
-                                    {order.shipment.trackingStatus ||
-                                        <span className="text-muted-foreground text-xs italic">Not started</span>
-                                    }
-                                </td>
-                                <td className="px-6 py-4 text-right">
-                                    <Link href={`/admin/orders/${order.id}`}>
-                                        <Button variant="ghost" size="sm">
-                                            <Eye className="w-4 h-4 mr-2" />
-                                            View
-                                        </Button>
-                                    </Link>
-                                </td>
-                            </tr>
-                        ))}
-                        {filteredOrders.length === 0 && (
+                <div className="overflow-x-auto">
+                    <table className="w-full text-sm text-left min-w-[800px] md:min-w-full">
+                        <thead className="bg-muted/50 text-muted-foreground font-medium border-b border-border">
                             <tr>
-                                <td colSpan={7} className="text-center py-8 text-muted-foreground">
-                                    No orders found.
-                                </td>
+                                <th className="px-6 py-3">Order ID</th>
+                                <th className="px-6 py-3">Customer</th>
+                                <th className="px-6 py-3 hidden md:table-cell">Date</th>
+                                <th className="px-6 py-3">Status</th>
+                                <th className="px-6 py-3">Total</th>
+                                <th className="px-6 py-3 hidden md:table-cell">Shipment</th>
+                                <th className="px-6 py-3 text-right">Actions</th>
                             </tr>
-                        )}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody className="divide-y divide-border">
+                            {filteredOrders.map(order => (
+                                <tr key={order.id} className="hover:bg-muted/10 transition-colors">
+                                    <td className="px-6 py-4 font-medium text-foreground">
+                                        {order.id}
+                                    </td>
+                                    <td className="px-6 py-4">
+                                        <div className="font-medium">{order.customer.name}</div>
+                                        <div className="text-xs text-muted-foreground">{order.customer.email}</div>
+                                    </td>
+                                    <td className="px-6 py-4 hidden md:table-cell">{order.date}</td>
+                                    <td className="px-6 py-4">
+                                        <OrderStatusBadge status={order.orderStatus} />
+                                    </td>
+                                    <td className="px-6 py-4 font-medium">
+                                        {formatPrice(order.totalAmount)}
+                                    </td>
+                                    <td className="px-6 py-4 hidden md:table-cell">
+                                        {order.shipment.trackingStatus ||
+                                            <span className="text-muted-foreground text-xs italic">Not started</span>
+                                        }
+                                    </td>
+                                    <td className="px-6 py-4 text-right">
+                                        <Link href={`/admin/orders/${order.id}`}>
+                                            <Button variant="ghost" size="sm">
+                                                <Eye className="w-4 h-4 mr-2" />
+                                                View
+                                            </Button>
+                                        </Link>
+                                    </td>
+                                </tr>
+                            ))}
+                            {filteredOrders.length === 0 && (
+                                <tr>
+                                    <td colSpan={7} className="text-center py-8 text-muted-foreground">
+                                        No orders found.
+                                    </td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     );

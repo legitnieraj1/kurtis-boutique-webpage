@@ -55,7 +55,7 @@ export function NewArrivalsSection() {
     }, [products, activeTab]);
 
     return (
-        <section className="py-20 bg-[#faf9f6]"> {/* Ivory/White-ish background */}
+        <section className="pt-32 pb-20 md:py-20 bg-[#faf9f6]"> {/* Ivory/White-ish background */}
             <div className="container mx-auto px-4 md:px-8">
 
                 {/* Header */}

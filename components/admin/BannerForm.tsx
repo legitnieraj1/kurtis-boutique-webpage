@@ -205,7 +205,7 @@ export function BannerForm({ initialData, onClose }: BannerFormProps) {
                         <label className="text-sm font-medium text-stone-700">Redirect Link</label>
                         <Input
                             {...register("link")}
-                            placeholder="/shop?category=..."
+                            placeholder="Enter redirect link"
                             className="border-stone-200 focus-visible:ring-stone-400 focus-visible:border-stone-400 bg-stone-50/50"
                         />
                     </div>

@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 
 export function Footer() {
     return (
-        <footer className="bg-secondary/30 pt-16 pb-8 border-t border-border">
+        <footer className="bg-gradient-to-br from-white via-pink-50 to-rose-100/40 pt-16 pb-8 border-t border-pink-100">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
 
@@ -32,7 +32,7 @@ export function Footer() {
                         <div className="flex gap-2 max-w-sm pt-2">
                             <input
                                 type="email"
-                                placeholder="Your email address"
+                                placeholder="Enter your email"
                                 className="flex-1 px-4 py-2 rounded-md border border-foreground/20 bg-white/50 text-sm focus:outline-none focus:ring-1 focus:ring-primary font-medium placeholder:text-foreground/50 text-foreground"
                             />
                             <Button className="font-semibold shadow-md">Subscribe</Button>

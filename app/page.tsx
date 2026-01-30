@@ -26,7 +26,9 @@ export default function Home() {
   }, []);
 
   // Use categories from store for grid
-  const displayCategories = categories;
+  const displayCategories = categories.filter(cat =>
+    products.some(p => p.category === cat.id)
+  );
 
   return (
     <div className="min-h-screen font-sans selection:bg-primary/20">
@@ -38,12 +40,12 @@ export default function Home() {
 
         {/* HERO SECTION */}
         <section className="relative w-full pt-10 pb-40 md:pb-64 bg-white flex flex-col items-center justify-center overflow-visible">
-          <div className="flex flex-col items-center gap-8 animate-in fade-in zoom-in duration-1000 p-4 w-full">
+          <div className="flex flex-col items-center gap-8 animate-in fade-in duration-700 p-4 w-full">
             {/* Logo */}
             <img
               src="/kurtis-logo-large.png"
               alt="Kurtis Boutique"
-              className="w-48 sm:w-64 md:w-80 h-auto object-contain drop-shadow-sm mb-4"
+              className="w-48 sm:w-64 md:w-80 h-auto object-contain drop-shadow-sm mb-4 animate-in fade-in slide-in-from-bottom-4 duration-1000 delay-200 fill-mode-forwards"
             />
 
             {/* Overlapping Banner */}

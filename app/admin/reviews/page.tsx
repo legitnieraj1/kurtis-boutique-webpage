@@ -65,7 +65,7 @@ export default function ReviewsAdminPage() {
     };
 
     return (
-        <div className="p-8 max-w-5xl mx-auto space-y-8">
+        <div className="p-4 md:p-8 max-w-5xl mx-auto space-y-8">
             {showCropper && tempImage && (
                 <ImageCropperModal
                     imageSrc={tempImage}
@@ -123,7 +123,7 @@ export default function ReviewsAdminPage() {
                                 className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                                 value={name}
                                 onChange={e => setName(e.target.value)}
-                                placeholder="e.g. Sarah Jones"
+                                placeholder="Enter customer name"
                             />
                         </div>
 
@@ -134,7 +134,7 @@ export default function ReviewsAdminPage() {
                                 className="flex min-h-[60px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                                 value={description}
                                 onChange={e => setDescription(e.target.value)}
-                                placeholder="Short note about this review (not shown to customers)"
+                                placeholder="Enter internal note"
                             />
                         </div>
 
