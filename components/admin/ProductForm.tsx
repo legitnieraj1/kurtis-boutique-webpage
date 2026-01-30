@@ -150,6 +150,18 @@ export default function ProductForm({ initialData, onSubmit, onCancel }: Product
                             className="w-full px-3 py-2 border rounded-md bg-background focus:ring-1 focus:ring-primary"
                             value={name}
                             onChange={e => setName(e.target.value)}
+                            placeholder="e.g. Royal Blue Silk Kurti"
+                        />
+                    </div>
+
+                    <div className="space-y-2 md:col-span-2">
+                        <label className="text-sm font-medium">Description</label>
+                        <textarea
+                            required
+                            className="w-full px-3 py-2 border rounded-md bg-background focus:ring-1 focus:ring-primary min-h-[100px]"
+                            value={description}
+                            onChange={e => setDescription(e.target.value)}
+                            placeholder="e.g. Elegant silk kurti with intricate gold embroidery..."
                         />
                     </div>
 
@@ -177,7 +189,7 @@ export default function ProductForm({ initialData, onSubmit, onCancel }: Product
                                 <input
                                     type="text"
                                     autoFocus
-                                    placeholder="New Category Name"
+                                    placeholder="e.g. Festive Collection"
                                     className="flex-1 px-3 py-2 border rounded-md"
                                     value={newCategoryName}
                                     onChange={e => setNewCategoryName(e.target.value)}
@@ -199,7 +211,7 @@ export default function ProductForm({ initialData, onSubmit, onCancel }: Product
                                 type="number"
                                 min="0"
                                 required
-                                className="w-full px-3 py-2 border rounded-md bg-background"
+                                placeholder="e.g. 2999"
                                 value={price || ''}
                                 onChange={e => setPrice(Number(e.target.value))}
                             />
@@ -259,7 +271,7 @@ export default function ProductForm({ initialData, onSubmit, onCancel }: Product
                                 type="number"
                                 min="0"
                                 required
-                                className="w-full px-3 py-2 border rounded-md bg-background"
+                                placeholder="e.g. 100"
                                 value={stockTotal || ''}
                                 onChange={e => setStockTotal(Number(e.target.value))}
                             />
@@ -272,7 +284,7 @@ export default function ProductForm({ initialData, onSubmit, onCancel }: Product
                                 min="0"
                                 max={stockTotal}
                                 required
-                                className="w-full px-3 py-2 border rounded-md bg-background"
+                                placeholder="e.g. 95"
                                 value={stockRemaining}
                                 onChange={e => setStockRemaining(Number(e.target.value))}
                             />
