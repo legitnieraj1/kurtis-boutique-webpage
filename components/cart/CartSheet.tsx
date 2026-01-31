@@ -11,6 +11,8 @@ import { Button } from "@/components/ui/button";
 import { formatPrice } from "@/lib/utils";
 import { useIsMobile } from "@/lib/hooks/use-mobile";
 
+import { createPortal } from "react-dom";
+
 interface CartSheetProps {
     isOpen: boolean;
     onClose: () => void;
@@ -42,7 +44,7 @@ export function CartSheet({ isOpen, onClose }: CartSheetProps) {
         return total + (price * item.quantity);
     }, 0);
 
-    return (
+    return createPortal(
         <AnimatePresence>
             {isOpen && (
                 <>
@@ -193,6 +195,7 @@ export function CartSheet({ isOpen, onClose }: CartSheetProps) {
                     </motion.div>
                 </>
             )}
-        </AnimatePresence>
+        </AnimatePresence>,
+        document.body
     );
 }

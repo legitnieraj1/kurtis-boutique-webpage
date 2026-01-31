@@ -124,25 +124,27 @@ export default function ProductPage({ params }: { params: Promise<{ slug: string
                         </div>
 
                         {/* Thumbnails */}
-                        <div className="flex gap-4 overflow-x-auto pb-2">
-                            {product.images.map((img, idx) => (
-                                <button
-                                    key={idx}
-                                    onClick={() => setActiveImage(img)}
-                                    className={cn(
-                                        "relative w-20 aspect-[3/4] rounded-md overflow-hidden bg-muted border-2 transition-all flex-shrink-0",
-                                        activeImage === img ? "border-primary" : "border-transparent"
-                                    )}
-                                >
-                                    <img
-                                        src={img}
-                                        alt={`Product view ${idx + 1}`}
-                                        className="w-full h-full object-cover"
-                                    />
-                                    <span className="sr-only">View image {idx + 1}</span>
-                                </button>
-                            ))}
-                        </div>
+                        {product.images.some(img => img) && (
+                            <div className="flex gap-4 overflow-x-auto pb-2">
+                                {product.images.filter(img => img).map((img, idx) => (
+                                    <button
+                                        key={idx}
+                                        onClick={() => setActiveImage(img)}
+                                        className={cn(
+                                            "relative w-20 aspect-[3/4] rounded-md overflow-hidden bg-muted border-2 transition-all flex-shrink-0",
+                                            activeImage === img ? "border-primary" : "border-transparent"
+                                        )}
+                                    >
+                                        <img
+                                            src={img}
+                                            alt={`Product view ${idx + 1}`}
+                                            className="w-full h-full object-cover"
+                                        />
+                                        <span className="sr-only">View image {idx + 1}</span>
+                                    </button>
+                                ))}
+                            </div>
+                        )}
                     </div>
 
                     {/* MOVED: Mobile Sticky CTA (Now sits in flow after images on mobile) */}
@@ -237,26 +239,26 @@ export default function ProductPage({ params }: { params: Promise<{ slug: string
                         </div>
 
                         {/* Actions */}
-                        <div ref={actionsRef} className="flex flex-col sm:flex-row sm:items-center gap-4 pt-4 border-t border-border">
-                            <div className="flex items-center border border-input rounded-md w-max">
+                        <div ref={actionsRef} className="flex items-center gap-2 md:gap-3 pt-4 border-t border-border">
+                            <div className="flex items-center border border-input rounded-md h-10 md:h-14">
                                 <button
-                                    className="px-3 py-2 hover:bg-muted"
+                                    className="px-2 md:px-3 h-full hover:bg-muted border-r border-input"
                                     onClick={() => setQuantity(Math.max(1, quantity - 1))}
                                 >
-                                    <Minus className="w-4 h-4" />
+                                    <Minus className="w-3 h-3 md:w-4 md:h-4" />
                                 </button>
-                                <span className="w-8 text-center text-sm font-medium">{quantity}</span>
+                                <span className="w-8 md:w-10 text-center text-sm font-medium">{quantity}</span>
                                 <button
-                                    className="px-3 py-2 hover:bg-muted"
+                                    className="px-2 md:px-3 h-full hover:bg-muted border-l border-input"
                                     onClick={() => setQuantity(quantity + 1)}
                                 >
-                                    <Plus className="w-4 h-4" />
+                                    <Plus className="w-3 h-3 md:w-4 md:h-4" />
                                 </button>
                             </div>
 
                             <Button
                                 size="lg"
-                                className="flex-1 h-16 md:h-20 rounded-full bg-gradient-to-r from-primary via-rose-600 to-primary bg-[length:200%_auto] hover:bg-[position:right_center] transition-all duration-500 shadow-xl shadow-primary/25 hover:shadow-2xl hover:shadow-primary/40 text-xl md:text-2xl font-bold tracking-wider uppercase hover:-translate-y-1"
+                                className="flex-1 h-12 md:h-14 rounded-full bg-gradient-to-r from-primary via-rose-600 to-primary bg-[length:200%_auto] hover:bg-[position:right_center] transition-all duration-500 shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 text-sm md:text-base font-bold tracking-widest uppercase hover:-translate-y-0.5"
                                 onClick={handleAddToCart}
                                 disabled={!product.inStock}
                             >
@@ -266,10 +268,10 @@ export default function ProductPage({ params }: { params: Promise<{ slug: string
                             <Button
                                 variant="outline"
                                 size="icon"
-                                className={cn("h-14 w-14 rounded-full border-2", isWishlisted && "text-red-500 border-red-200 bg-red-50")}
+                                className={cn("h-10 w-10 md:h-14 md:w-14 rounded-full border-2 flex-shrink-0", isWishlisted && "text-red-500 border-red-200 bg-red-50")}
                                 onClick={toggleWishlist}
                             >
-                                <Heart className={cn("w-5 h-5", isWishlisted && "fill-current")} />
+                                <Heart className={cn("w-4 h-4 md:w-5 md:h-5", isWishlisted && "fill-current")} />
                             </Button>
                         </div>
 
