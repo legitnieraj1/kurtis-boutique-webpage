@@ -68,6 +68,31 @@
       transform: translateY(-50%);
     }
   }
+
+}
+
+/* Mobile Optimizations */
+@media (max-width: 768px) {
+  .mobile-gpu {
+    will-change: transform, opacity;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+  }
+
+  /* Paint Containment for complex layers */
+  .paint-contain {
+    contain: layout paint style;
+  }
+}
+
+@media (max-width: 768px) {
+  :root {
+    --animate-first: moveVertical 60s ease infinite;
+    --animate-second: moveInCircle 40s reverse infinite;
+    --animate-third: moveInCircle 80s linear infinite;
+    --animate-fourth: moveHorizontal 80s ease infinite;
+    --animate-fifth: moveInCircle 40s ease infinite;
+  }
 }
 
 :root {

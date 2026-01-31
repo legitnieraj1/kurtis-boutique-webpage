@@ -29,7 +29,7 @@ export function CategoryBubbles() {
                                         <img
                                             src={cat.image}
                                             alt={cat.name}
-                                            className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-110"
+                                            className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-110 mobile-gpu"
                                         />
                                     ) : (
                                         <div className="w-full h-full flex items-center justify-center bg-stone-200 text-stone-400 font-serif text-lg">

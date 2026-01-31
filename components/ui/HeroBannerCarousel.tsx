@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useBannerStore } from "@/lib/banner-store";
+import { useIsMobile } from "@/lib/hooks/use-mobile";
 
 // Mock Data Structure
 // In a real app, this could come from an API or CMS
@@ -13,6 +14,7 @@ export function HeroBannerCarousel() {
     const [currentIndex, setCurrentIndex] = useState(0);
     const activeBanners = banners.filter((b) => b.isActive);
 
+    const isMobile = useIsMobile();
     // Auto-slide logic
     useEffect(() => {
         if (activeBanners.length <= 1) return;
@@ -40,7 +42,7 @@ export function HeroBannerCarousel() {
 
     return (
         <motion.div
-            className="relative w-full h-full overflow-hidden group"
+            className="relative w-full h-full overflow-hidden group mobile-gpu" // mobile-gpu for promotion
             drag="x"
             dragConstraints={{ left: 0, right: 0 }}
             dragElastic={0.05}
@@ -63,7 +65,7 @@ export function HeroBannerCarousel() {
                             key={activeBanners[currentIndex].id}
                             src={activeBanners[currentIndex].image}
                             alt="Hero Banner"
-                            className="absolute inset-0 w-full h-full object-cover"
+                            className="absolute inset-0 w-full h-full object-cover mobile-gpu" // GPU promotion
                             initial={{ opacity: 0, scale: 1.05, x: 20 }}
                             animate={{ opacity: 1, scale: 1, x: 0 }}
                             exit={{ opacity: 0, x: -20 }}

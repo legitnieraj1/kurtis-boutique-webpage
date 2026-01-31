@@ -136,7 +136,7 @@ export function Navbar() {
 
                 {/* Mobile Menu (Slide-in) */}
                 <div className={cn(
-                    "fixed inset-0 z-[100] bg-background transform transition-transform duration-300 ease-in-out md:hidden flex flex-col",
+                    "fixed inset-0 z-[100] bg-background transform transition-transform duration-300 ease-in-out md:hidden flex flex-col mobile-gpu",
                     isOpen ? "translate-x-0" : "-translate-x-full"
                 )}>
                     {/* Header */}

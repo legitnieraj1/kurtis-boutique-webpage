@@ -3,6 +3,7 @@
 import classNames from "classnames";
 import { useTheme } from "next-themes";
 import { useEffect, useRef, useState } from "react";
+import { useIsMobile } from "@/lib/hooks/use-mobile";
 
 export const BackgroundGradientAnimation = ({
     firstColor = "128, 24, 72",
@@ -89,8 +90,22 @@ export const BackgroundGradientAnimation = ({
         setIsSafari(/^((?!chrome|android).)*safari/i.test(navigator.userAgent));
     }, []);
 
+    // Use our hook to detect mobile
+    const isMobile = useIsMobile();
+    const [mountInteractive, setMountInteractive] = useState(false);
+
     useEffect(() => {
-        if (!interactive) return;
+        // Only enable interactive mode on desktop to save resources
+        if (!isMobile && interactive) {
+            setMountInteractive(true);
+        } else {
+            setMountInteractive(false);
+        }
+    }, [isMobile, interactive]);
+
+
+    useEffect(() => {
+        if (!mountInteractive) return;
 
         function animateMovement() {
             if (!interactiveRef.current) {
@@ -119,7 +134,7 @@ export const BackgroundGradientAnimation = ({
                 cancelAnimationFrame(animationFrameRef.current);
             }
         };
-    }, [interactive]);
+    }, [mountInteractive]);
 
     const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
         if (!interactiveRef.current) return;
@@ -135,7 +150,8 @@ export const BackgroundGradientAnimation = ({
         <div
             className={classNames(
                 "h-screen w-screen relative overflow-hidden top-0 left-0 bg-[linear-gradient(40deg,var(--gradient-background-start),var(--gradient-background-end))]",
-                containerClassName
+                containerClassName,
+                "paint-contain" // Add paint containment
             )}
         >
             <svg className="hidden">
@@ -159,7 +175,7 @@ export const BackgroundGradientAnimation = ({
             <div className={classNames(className, "relative z-10")}>{children}</div>
             <div
                 className={classNames(
-                    "gradients-container h-full w-full blur-lg absolute inset-0 z-0",
+                    "gradients-container h-full w-full blur-lg absolute inset-0 z-0 mobile-gpu", // Add GPU promotion
                     isSafari ? "blur-2xl" : "[filter:url(#blurMe)_blur(40px)]"
                 )}
             >
@@ -209,7 +225,7 @@ export const BackgroundGradientAnimation = ({
                     )}
                 ></div>
 
-                {interactive && (
+                {mountInteractive && (
                     <div
                         ref={interactiveRef}
                         onMouseMove={handleMouseMove}

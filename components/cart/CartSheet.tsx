@@ -9,6 +9,7 @@ import { useStore } from "@/lib/store"; // Cart Store
 import { useProductStore } from "@/lib/store"; // Product Data
 import { Button } from "@/components/ui/button";
 import { formatPrice } from "@/lib/utils";
+import { useIsMobile } from "@/lib/hooks/use-mobile";
 
 interface CartSheetProps {
     isOpen: boolean;
@@ -18,6 +19,7 @@ interface CartSheetProps {
 export function CartSheet({ isOpen, onClose }: CartSheetProps) {
     const { cart, removeFromCart, updateCartItemQuantity } = useStore();
     const { products } = useProductStore();
+    const isMobile = useIsMobile();
     const [hydrated, setHydrated] = useState(false);
 
     useEffect(() => {
@@ -58,8 +60,8 @@ export function CartSheet({ isOpen, onClose }: CartSheetProps) {
                         initial={{ x: "100%" }}
                         animate={{ x: 0 }}
                         exit={{ x: "100%" }}
-                        transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                        className="fixed right-0 top-0 h-[100dvh] w-full sm:w-[500px] bg-background shadow-2xl z-[101] flex flex-col"
+                        transition={isMobile ? { type: "tween", duration: 0.3 } : { type: "spring", stiffness: 300, damping: 30 }}
+                        className="fixed right-0 top-0 h-[100dvh] w-full sm:w-[500px] bg-background shadow-2xl z-[101] flex flex-col mobile-gpu"
                     >
                         {/* Header */}
                         <div className="flex items-center justify-between p-6 border-b border-border">
@@ -174,7 +176,7 @@ export function CartSheet({ isOpen, onClose }: CartSheetProps) {
                                             id: `ORD-${Date.now().toString().slice(-6)}`,
                                             date: new Date().toISOString(),
                                             total: subtotal,
-                                            status: 'pending' as const,
+                                            status: 'Pending' as const,
                                             items: cartItems,
                                             email: email
                                         };
