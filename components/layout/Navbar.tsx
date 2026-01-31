@@ -12,7 +12,7 @@ import { SearchSheet } from "@/components/layout/SearchSheet";
 const links = [
     { href: "/", label: "Home" },
     { href: "/shop", label: "Shop" },
-    { href: "/wishlist", label: "Wishlist" },
+    { href: "/orders", label: "Orders" },
     { href: "/contact", label: "Contact" },
 ];
 
@@ -103,7 +103,8 @@ export function Navbar() {
                                 </Link>
                             )}
 
-                            {/* Wishlist: Desktop Only (Mobile is on Left) */}
+
+
                             <Link href="/wishlist" className="hidden md:flex">
                                 <Button variant="ghost" size="icon">
                                     <Heart className="h-5 w-5" />

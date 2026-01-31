@@ -19,9 +19,12 @@ export interface Order {
     id: string;
     date: string;
     total: number;
-    status: 'pending' | 'processing' | 'completed' | 'cancelled';
+    status: 'Pending' | 'Shipped' | 'In Transit' | 'Delivered' | 'Cancelled';
     items: CartItem[];
     email: string;
+    awbId?: string;
+    trackingUrl?: string;
+    timeline?: { status: string; date: string; description: string }[];
 }
 
 // --- Customisation Types ---
@@ -140,13 +143,28 @@ export const useStore = create<StoreState>()(
             name: 'kurtis-boutique-storage',
             version: 3, // Bump for migration if needed
             migrate: (persistedState: any, version: number) => {
+                let state = persistedState;
+
                 if (version < 3) {
-                    return {
-                        ...persistedState,
+                    state = {
+                        ...state,
                         customisationQueries: [],
                     };
                 }
-                return persistedState;
+
+                // Migration for Order Statuses (v3 fix)
+                if (state.orders) {
+                    state.orders = state.orders.map((order: any) => {
+                        let newStatus = order.status;
+                        if (order.status === 'pending') newStatus = 'Pending';
+                        if (order.status === 'processing') newStatus = 'In Transit';
+                        if (order.status === 'completed') newStatus = 'Delivered';
+                        if (order.status === 'cancelled') newStatus = 'Cancelled';
+                        return { ...order, status: newStatus };
+                    });
+                }
+
+                return state;
             },
         }
     )
