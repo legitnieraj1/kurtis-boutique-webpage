@@ -26,7 +26,7 @@ export default function AdminDashboard() {
     const safeProducts = Array.isArray(storeProducts) ? storeProducts : [];
 
     const totalSales = safeOrders.reduce((sum, order) => sum + (Number(order.total) || 0), 0);
-    const activeOrders = safeOrders.filter(o => o.status === 'pending' || o.status === 'processing').length;
+    const activeOrders = safeOrders.filter(o => o.status === 'Pending' || o.status === 'In Transit' || o.status === 'Shipped').length;
     const productsInStock = safeProducts.filter(p => p.inStock).length;
 
     return (
@@ -74,8 +74,8 @@ export default function AdminDashboard() {
                                         <td className="px-6 py-4 text-muted-foreground">{order.email || 'Guest'}</td>
                                         <td className="px-6 py-4">{formatDate(order.date)}</td>
                                         <td className="px-6 py-4">
-                                            <span className={`px-2 py-1 rounded-full text-xs ${order.status === 'completed' ? 'bg-green-100 text-green-800' :
-                                                order.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
+                                            <span className={`px-2 py-1 rounded-full text-xs ${order.status === 'Delivered' ? 'bg-green-100 text-green-800' :
+                                                order.status === 'Pending' ? 'bg-yellow-100 text-yellow-800' :
                                                     'bg-gray-100 text-gray-800'
                                                 }`}>
                                                 {order.status || 'Unknown'}
